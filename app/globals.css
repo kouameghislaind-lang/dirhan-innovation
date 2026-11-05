@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/*
+  Charte graphique DIRHAN INNOVATION
+  Ces "tokens" créent des classes Tailwind : bg-noir, text-or, border-or/30, etc.
+*/
+@theme {
+  --color-noir: #080808;
+  --color-noir-clair: #121212;
+  --color-noir-carte: #161616;
+  --color-or: #d4af37;
+  --color-or-clair: #e8c95f;
+  --color-or-fonce: #a8862a;
+  --color-blanc: #ffffff;
+  --color-gris: #a3a3a3;
+
+  --font-titre: var(--font-playfair);
+  --font-sans: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-noir);
+}
+
+body {
+  background-color: var(--color-noir);
+  color: var(--color-blanc);
+}
+
+::selection {
+  background-color: var(--color-or);
+  color: var(--color-noir);
+}
+
+/* Texte doré en dégradé, pour les mots mis en valeur */
+.texte-or {
+  background: linear-gradient(
+    135deg,
+    var(--color-or-clair) 0%,
+    var(--color-or) 50%,
+    var(--color-or-fonce) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Évite que la dernière lettre en italique soit coupée en fin de ligne */
+  padding-right: 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Contour doré visible quand on navigue au clavier (accessibilité) */
+:focus-visible {
+  outline: 2px solid var(--color-or);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Apparition du haut de page, en CSS pur (visible sans attendre le JavaScript) */
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.apparition-immediate {
+  animation: apparition 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Message du formulaire : apparition courte, sans jamais masquer le texte */
+@keyframes apparition-message {
+  from {
+    transform: translateY(6px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.apparition-message {
+  animation: apparition-message 0.35s ease-out;
+}
+
+/* Point lumineux qui "pulse" dans les illustrations de projets */
+@keyframes pulsation {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.illus-pulse {
+  animation: pulsation 2.4s ease-in-out infinite;
+}
+
+/* Anneaux qui tournent lentement dans le visuel de l'accueil */
+@keyframes rotation {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-rotation {
+  animation: rotation 60s linear infinite;
+}
+
+.hero-rotation-inverse {
+  animation: rotation 90s linear infinite reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .apparition-immediate,
+  .apparition-message,
+  .illus-pulse,
+  .hero-rotation,
+  .hero-rotation-inverse {
+    animation: none;
+  }
+}
