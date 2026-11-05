@@ -31,13 +31,13 @@ type Props = {
 };
 
 const base =
-  "group/bouton inline-flex shrink-0 items-center justify-center gap-2.5 whitespace-nowrap rounded-full font-semibold transition-[background-color,border-color,color,transform] duration-300 active:scale-[0.98] disabled:cursor-wait disabled:opacity-70";
+  "group/bouton inline-flex shrink-0 items-center justify-center gap-2.5 whitespace-nowrap font-semibold transition-[background-color,border-color,color,transform] duration-300 active:scale-[0.98] disabled:cursor-wait disabled:opacity-70";
 
 const variantes: Record<Variante, string> = {
-  principal: "bg-or text-noir hover:bg-or-clair",
-  secondaire: "border border-ligne-forte text-blanc hover:border-or hover:text-or",
-  accent: "border border-or/40 text-or hover:border-or hover:bg-or hover:text-noir",
-  lien: "text-or hover:text-or-clair",
+  principal: "rounded-full bg-or text-noir hover:bg-or-clair",
+  secondaire: "rounded-full border border-ligne-forte text-blanc hover:border-or hover:text-or",
+  accent: "rounded-full border border-or/40 text-or hover:border-or hover:bg-or hover:text-noir",
+  lien: "lien-anime text-or hover:text-or-clair",
 };
 
 const tailles: Record<Taille, string> = {
@@ -53,7 +53,7 @@ const mouvements = {
 };
 
 export function classesBouton(variante: Variante = "principal", taille: Taille = "normal") {
-  return `${base} ${variantes[variante]} ${variante === "lien" ? "py-2" : tailles[taille]}`;
+  return `${base} ${variantes[variante]} ${variante === "lien" ? "min-h-6 pb-0.5" : tailles[taille]}`;
 }
 
 export default function Bouton({
@@ -70,6 +70,8 @@ export default function Bouton({
   externe,
 }: Props) {
   const classes = `${classesBouton(variante, taille)} ${etirer ? "after:absolute after:inset-0" : ""} ${className}`;
+  // Les boutons principaux et secondaires glissent légèrement vers la souris (voir EffetsInteractifs)
+  const magnetique = variante === "principal" || variante === "secondaire" ? { "data-magnetique": "" } : {};
   const contenu = (
     <>
       {children}
@@ -83,20 +85,20 @@ export default function Bouton({
 
   if (href && externe) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={classes} {...magnetique}>
         {contenu}
       </a>
     );
   }
   if (href) {
     return (
-      <Link href={href} onClick={onClick} className={classes}>
+      <Link href={href} onClick={onClick} className={classes} {...magnetique}>
         {contenu}
       </Link>
     );
   }
   return (
-    <button type={type} disabled={disabled} onClick={onClick} className={classes}>
+    <button type={type} disabled={disabled} onClick={onClick} className={classes} {...magnetique}>
       {contenu}
     </button>
   );

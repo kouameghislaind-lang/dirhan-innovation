@@ -5,7 +5,7 @@ import { actionPrincipale, liensLegaux, navigation, services, site } from "@/lib
 
 // Pied de page « signature » : appel à l'action, plan du site, contact et grande signature DIRHAN.
 export default function Footer() {
-  const lien = "inline-block py-1 text-sm text-gris transition-colors hover:text-blanc";
+  const lien = "lien-anime inline-block text-sm leading-6 text-gris hover:text-blanc";
 
   return (
     <footer className="relative overflow-hidden border-t border-ligne bg-noir-clair">
@@ -28,7 +28,7 @@ export default function Footer() {
 
           <div className="lg:col-span-2">
             <h2 className="surtitre">Navigation</h2>
-            <ul className="mt-4 space-y-1">
+            <ul className="mt-4 space-y-2">
               {navigation.map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className={lien}>
@@ -41,7 +41,7 @@ export default function Footer() {
 
           <div className="lg:col-span-3">
             <h2 className="surtitre">Services</h2>
-            <ul className="mt-4 space-y-1">
+            <ul className="mt-4 space-y-2">
               {services.map((s) => (
                 <li key={s.numero}>
                   <Link href={`/services#${s.slug}`} className={lien}>
@@ -54,7 +54,7 @@ export default function Footer() {
 
           <div className="lg:col-span-3">
             <h2 className="surtitre">Contact</h2>
-            <ul className="mt-4 space-y-1">
+            <ul className="mt-4 space-y-2">
               <li className="py-1 text-sm text-gris">{site.ville}</li>
               {site.email && (
                 <li>
@@ -102,7 +102,7 @@ export default function Footer() {
             <ul className="flex flex-wrap gap-x-6 gap-y-1">
               {liensLegaux.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="inline-block py-1 transition-colors hover:text-blanc">
+                  <Link href={l.href} className="lien-anime inline-block leading-6 hover:text-blanc">
                     {l.label}
                   </Link>
                 </li>

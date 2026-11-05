@@ -107,15 +107,114 @@
     var(--color-noir-carte);
 }
 
-/* Carte cliquable : le filet devient doré au survol */
+/* Carte cliquable :
+   - au survol, un filet en dégradé doré apparaît sur le contour (::before)
+   - un halo lumineux suit le pointeur de la souris (::after, position fournie par EffetsInteractifs) */
 @utility carte-interactive {
+  position: relative;
+  isolation: isolate;
   transition:
     border-color 0.4s ease,
     box-shadow 0.4s ease,
     transform 0.4s ease;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(
+      135deg,
+      rgb(232 201 95 / 0.9),
+      rgb(212 175 55 / 0.15) 35%,
+      transparent 55%,
+      rgb(212 175 55 / 0.5)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--pointeur-x, 50%) var(--pointeur-y, 0%),
+      rgb(212 175 55 / 0.09),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
   &:hover {
-    border-color: rgb(212 175 55 / 0.45);
+    border-color: transparent;
     box-shadow: 0 24px 60px -28px rgb(212 175 55 / 0.4);
+  }
+  &:hover::before,
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+/* Lien avec soulignement qui se dessine au survol */
+@utility lien-anime {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition:
+    background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.3s ease;
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/* Grain photographique très léger sur tout le site (matière "premium") */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* Barre de progression de lecture (CSS pur, navigateurs compatibles uniquement) */
+.barre-lecture {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .barre-lecture {
+    display: block;
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 60;
+    height: 2px;
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+    background: linear-gradient(90deg, var(--color-or-fonce), var(--color-or), var(--color-or-clair));
+    animation: progression-lecture linear both;
+    animation-timeline: scroll(root block);
+    pointer-events: none;
+  }
+}
+
+@keyframes progression-lecture {
+  to {
+    transform: scaleX(1);
   }
 }
 
@@ -244,6 +343,9 @@ body {
   }
   .bande-defilante {
     animation: none;
+  }
+  .barre-lecture {
+    display: none;
   }
   .apparition-immediate,
   .apparition-message,

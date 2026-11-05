@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Animations from "@/components/Animations";
+import EffetsInteractifs from "@/components/EffetsInteractifs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { estSitePublic, services, site } from "@/lib/site";
@@ -98,6 +99,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             __html: JSON.stringify(donneesStructurees).replace(/</g, "\\u003c"),
           }}
         />
+        {/* Fine barre dorée qui indique la progression de lecture */}
+        <div aria-hidden className="barre-lecture" />
+        <EffetsInteractifs />
         <Animations>
           <Header />
           <main id="contenu" className="flex-1">
