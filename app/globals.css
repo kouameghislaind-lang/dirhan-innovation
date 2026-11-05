@@ -223,9 +223,27 @@ body {
   animation: rotation 90s linear infinite reverse;
 }
 
+/* Bande défilante des expertises */
+@keyframes defilement {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.bande-defilante {
+  animation: defilement 40s linear infinite;
+}
+
+.bande-defilante:hover {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .bande-defilante {
+    animation: none;
   }
   .apparition-immediate,
   .apparition-message,

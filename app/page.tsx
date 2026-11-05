@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Apparition from "@/components/Apparition";
 import HeroVisuel from "@/components/HeroVisuel";
 import Icone from "@/components/Icone";
+import IllustrationProjet from "@/components/IllustrationProjet";
+import BandeDefilante from "@/components/BandeDefilante";
 import AppelAction from "@/components/ui/AppelAction";
 import Bouton from "@/components/ui/Bouton";
 import EnTeteSection from "@/components/ui/EnTeteSection";
@@ -14,9 +16,11 @@ export const metadata: Metadata = {
   openGraph: { url: "/" },
 };
 
-// Disposition des 5 cartes services : 3 en haut, 2 plus larges en bas (sur ordinateur)
-const largeurCarte = (i: number) =>
-  i < 3 ? "lg:col-span-2" : i === 4 ? "sm:col-span-2 lg:col-span-3" : "lg:col-span-3";
+// Mosaïque « bento » des 5 services (ordinateur) :
+//   [ 1 vedette (4 col., 2 lignes) ][ 2 ]
+//   [                             ][ 3 ]
+//   [     4 (3 col.)    ][    5 (3 col.)    ]
+const placeCarte = ["sm:col-span-2 lg:col-span-4 lg:row-span-2", "lg:col-span-2", "lg:col-span-2", "lg:col-span-3", "lg:col-span-3"];
 
 export default function Accueil() {
   return (
@@ -76,6 +80,9 @@ export default function Accueil() {
         </div>
       </section>
 
+      {/* ===== Bande défilante des expertises ===== */}
+      <BandeDefilante />
+
       {/* ===== 2. SERVICES ===== */}
       <Section id="services">
         <EnTeteSection
@@ -88,36 +95,51 @@ export default function Accueil() {
           }
         />
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-6">
-          {accueil.services.map((s, i) => (
-            <Apparition key={s.titre} delai={(i % 3) * 0.08} className={largeurCarte(i)}>
-              <article className="carte carte-interactive group relative flex h-full flex-col overflow-hidden p-8 hover:-translate-y-1.5 sm:p-9">
-                {/* Lueur dorée au survol */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-or/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
-                />
-                <div className="flex items-start justify-between">
-                  <span className="flex h-14 w-14 items-center justify-center rounded-[var(--radius-petit)] border border-ligne bg-noir-eleve text-or transition-colors duration-500 group-hover:border-or/40 group-hover:bg-or group-hover:text-noir">
-                    <Icone nom={s.icone} className="h-7 w-7" />
-                  </span>
-                  <span className="font-titre text-sm text-blanc/35">0{i + 1}</span>
-                </div>
-                <h3 className="titre-carte mt-8 transition-colors group-hover:text-or">{s.titre}</h3>
-                <p className="mt-4 flex-1 leading-relaxed text-gris">{s.texte}</p>
-                <Bouton
-                  href={s.lien}
-                  variante="accent"
-                  taille="compact"
-                  fleche="droite"
-                  etirer
-                  className="mt-8 self-start"
+        <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
+          {accueil.services.map((s, i) => {
+            const vedette = i === 0;
+            return (
+              <Apparition key={s.titre} delai={(i % 3) * 0.08} className={placeCarte[i]}>
+                <article
+                  className={`carte carte-interactive group relative flex h-full flex-col overflow-hidden hover:-translate-y-1 ${
+                    vedette ? "p-8 sm:p-10" : "p-8"
+                  }`}
                 >
-                  En savoir plus
-                </Bouton>
-              </article>
-            </Apparition>
-          ))}
+                  {/* Lueur dorée au survol */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-or/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+                  />
+                  <div className="flex items-start justify-between">
+                    <span className="flex h-14 w-14 items-center justify-center rounded-[var(--radius-petit)] border border-ligne bg-noir-eleve text-or transition-colors duration-500 group-hover:border-or/40 group-hover:bg-or group-hover:text-noir">
+                      <Icone nom={s.icone} className="h-7 w-7" />
+                    </span>
+                    <span className="font-titre text-sm text-blanc/35">0{i + 1}</span>
+                  </div>
+                  <h3 className={`mt-8 transition-colors group-hover:text-or ${vedette ? "titre-bloc" : "titre-carte"}`}>
+                    {s.titre}
+                  </h3>
+                  <p className={`mt-4 leading-relaxed text-gris ${vedette ? "max-w-md text-lg" : ""}`}>{s.texte}</p>
+
+                  {/* Carte vedette : aperçu illustré */}
+                  {vedette && (
+                    <div className="relative mt-10 hidden overflow-hidden rounded-[var(--radius-petit)] border border-ligne sm:block">
+                      <IllustrationProjet
+                        type="boutique"
+                        className="aspect-[16/9] w-full transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                      />
+                    </div>
+                  )}
+
+                  <div className="mt-auto pt-8">
+                    <Bouton href={s.lien} variante="accent" taille="compact" fleche="droite" etirer>
+                      En savoir plus
+                    </Bouton>
+                  </div>
+                </article>
+              </Apparition>
+            );
+          })}
         </div>
       </Section>
 
