@@ -28,6 +28,9 @@ export const site = {
   // À compléter quand tu me donneras tes coordonnées officielles :
   email: "",
   telephone: "",
+  // Numéro WhatsApp au format international, sans espace ni "+" (ex. : 2250700000000).
+  // Tant qu'il est vide, aucun bouton WhatsApp n'est affiché.
+  whatsapp: "",
 };
 
 // L'action principale du site : un seul libellé partout, pour ne pas faire hésiter le visiteur
@@ -40,6 +43,8 @@ export type IconeNom =
   | "logiciel"
   | "contenu"
   | "identite"
+  | "marketing"
+  | "ia"
   | "innovation"
   | "creativite"
   | "accompagnement"
@@ -146,6 +151,7 @@ export const navigation = [
 export const services = [
   {
     numero: "01",
+    icone: "web" as IconeNom,
     slug: "sites-web",
     titre: "Création de sites web",
     description:
@@ -162,6 +168,7 @@ export const services = [
   },
   {
     numero: "02",
+    icone: "mobile" as IconeNom,
     slug: "applications-mobiles",
     titre: "Applications mobiles",
     description:
@@ -178,6 +185,7 @@ export const services = [
   },
   {
     numero: "03",
+    icone: "logiciel" as IconeNom,
     slug: "logiciels",
     titre: "Développement de logiciels",
     description:
@@ -194,6 +202,7 @@ export const services = [
   },
   {
     numero: "04",
+    icone: "identite" as IconeNom,
     slug: "branding",
     titre: "Branding & design graphique",
     description:
@@ -210,6 +219,7 @@ export const services = [
   },
   {
     numero: "05",
+    icone: "marketing" as IconeNom,
     slug: "marketing-digital",
     titre: "Marketing digital",
     description:
@@ -226,6 +236,7 @@ export const services = [
   },
   {
     numero: "06",
+    icone: "ia" as IconeNom,
     slug: "ia-automatisation",
     titre: "IA & automatisation",
     description:
@@ -275,6 +286,8 @@ export type Realisation = {
   image?: string;
   lien?: string;
   annee?: string;
+  // Mis en avant en grand en tête du portfolio (un seul projet à la fois)
+  vedette?: boolean;
 };
 
 export const realisations: Realisation[] = [
@@ -308,6 +321,7 @@ export const realisations: Realisation[] = [
       "Indicateurs de performance",
     ],
     illustration: "flotte",
+    vedette: true,
   },
   {
     slug: "dirhan-resto-plus",
@@ -336,6 +350,23 @@ export const aPropos = {
   ],
 };
 
+// Manifeste affiché en grand sur la page À propos
+export const manifeste = {
+  texte:
+    "Nous croyons que l'excellence n'a pas de frontières. Qu'une idée née à Abidjan peut rivaliser avec les meilleures du monde. Et que chaque entreprise africaine mérite des outils digitaux à la hauteur de ses ambitions.",
+  // Mots du manifeste mis en valeur en or
+  motsCles: ["excellence", "Abidjan", "ambitions"],
+};
+
+// Fondateur : la section s'affiche automatiquement sur la page À propos dès que "nom" est rempli.
+// Photo : place le fichier dans public/ (ex. public/fondateur.jpg) et écris "/fondateur.jpg".
+export const fondateur = {
+  nom: "",
+  role: "", // ex. : Fondateur & directeur général
+  photo: "",
+  citation: "",
+};
+
 export const valeurs = [
   {
     titre: "Excellence",
@@ -353,6 +384,13 @@ export const valeurs = [
     titre: "Proximité",
     texte: "Nous sommes à Abidjan, disponibles et à l'écoute. Votre réussite est notre priorité.",
   },
+];
+
+// Points de réassurance affichés sur la page Contact (à adapter à tes engagements réels)
+export const reassurance = [
+  { titre: "Premier échange sans engagement", texte: "Nous prenons le temps de comprendre votre besoin avant toute proposition." },
+  { titre: "Une proposition claire", texte: "Un devis détaillé, un planning et un budget expliqués simplement." },
+  { titre: "Vos informations protégées", texte: "Vos données servent uniquement à vous répondre." },
 ];
 
 export const methode = [

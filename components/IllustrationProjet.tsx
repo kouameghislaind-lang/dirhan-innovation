@@ -4,6 +4,8 @@
 type Props = {
   type: "boutique" | "flotte" | "restaurant";
   className?: string;
+  // Remplit tout le cadre (quitte à rogner les bords) au lieu de laisser des bandes vides
+  remplir?: boolean;
 };
 
 const OR = "#D4AF37";
@@ -152,10 +154,11 @@ function Restaurant() {
   );
 }
 
-export default function IllustrationProjet({ type, className }: Props) {
+export default function IllustrationProjet({ type, className, remplir }: Props) {
   return (
     <svg
       viewBox="0 0 400 250"
+      preserveAspectRatio={remplir ? "xMidYMid slice" : "xMidYMid meet"}
       role="img"
       aria-label={`Illustration de concept : ${
         type === "boutique" ? "boutique en ligne" : type === "flotte" ? "tableau de bord de flotte automobile" : "solution pour restaurant"

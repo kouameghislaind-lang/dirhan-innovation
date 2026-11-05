@@ -17,7 +17,10 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
 
   // Les catégories sont déduites automatiquement des projets
   const categories = [...new Set(projets.map((p) => p.categorie))];
-  const visibles = filtre === TOUS ? projets : projets.filter((p) => p.categorie === filtre);
+  const visibles =
+    filtre === TOUS
+      ? [...projets].sort((a, b) => Number(Boolean(b.vedette)) - Number(Boolean(a.vedette)))
+      : projets.filter((p) => p.categorie === filtre);
   const boutons = [
     { nom: TOUS, nombre: projets.length },
     ...categories.map((c) => ({ nom: c, nombre: projets.filter((p) => p.categorie === c).length })),
@@ -55,12 +58,16 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
         </div>
       )}
 
-      <motion.ul layout className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+      <motion.ul layout className="mt-12 grid gap-8 md:grid-cols-2">
         <AnimatePresence mode="popLayout">
-          {visibles.map((p) => (
+          {visibles.map((p) => {
+            // Le projet vedette s'affiche en grand, sur toute la largeur, quand aucun filtre n'est actif
+            const enVedette = filtre === TOUS && Boolean(p.vedette);
+            return (
             <motion.li
               key={p.slug}
               layout
+              className={enVedette ? "md:col-span-2" : ""}
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96 }}
@@ -69,21 +76,23 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
               <motion.article
                 whileHover={{ y: -8 }}
                 transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                className="carte carte-interactive group relative flex h-full flex-col overflow-hidden"
+                className={`carte carte-interactive group relative flex h-full flex-col overflow-hidden ${
+                  enVedette ? "lg:flex-row" : ""
+                }`}
               >
                 {/* Visuel */}
-                <div className="relative aspect-[16/10] overflow-hidden">
+                <div className={`relative aspect-[16/10] overflow-hidden ${enVedette ? "lg:aspect-auto lg:min-h-[26rem] lg:w-3/5" : ""}`}>
                   <div className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-[1.06]">
                     {p.image ? (
                       <Image
                         src={p.image}
                         alt={`Aperçu du projet ${p.titre}`}
                         fill
-                        sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        sizes={enVedette ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 768px) 50vw, 100vw"}
                         className="object-cover"
                       />
                     ) : p.illustration ? (
-                      <IllustrationProjet type={p.illustration} className="h-full w-full" />
+                      <IllustrationProjet type={p.illustration} remplir className="h-full w-full" />
                     ) : null}
                   </div>
                   {/* Reflet doré au survol */}
@@ -95,13 +104,24 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
                 </div>
 
                 {/* Texte */}
-                <div className="flex flex-1 flex-col p-7">
-                  <p className="surtitre">{p.categorie}</p>
-                  <h3 className="titre-carte mt-3 transition-colors group-hover:text-or">
+                <div className={`flex flex-1 flex-col ${enVedette ? "p-8 sm:p-10 lg:justify-center" : "p-7"}`}>
+                  <p className="surtitre">{enVedette ? `À la une · ${p.categorie}` : p.categorie}</p>
+                  <h3 className={`mt-3 transition-colors group-hover:text-or ${enVedette ? "titre-bloc" : "titre-carte"}`}>
                     {p.titre}
                   </h3>
                   <p className="mt-1 text-sm text-gris">{p.client}</p>
-                  <p className="mt-4 flex-1 leading-relaxed text-blanc/80">{p.resume}</p>
+                  <p className={`mt-4 leading-relaxed text-blanc/80 ${enVedette ? "text-lg lg:flex-none" : "flex-1"}`}>{p.resume}</p>
+
+                  {/* Projet vedette : les axes du projet en étiquettes */}
+                  {enVedette && (
+                    <ul className="mt-6 flex flex-wrap gap-2">
+                      {p.axes.map((axe) => (
+                        <li key={axe} className="rounded-full border border-ligne px-3 py-1 text-xs text-blanc/70">
+                          {axe}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   <Bouton
                     href={`/realisations/${p.slug}`}
@@ -116,7 +136,8 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
                 </div>
               </motion.article>
             </motion.li>
-          ))}
+            );
+          })}
         </AnimatePresence>
       </motion.ul>
     </div>

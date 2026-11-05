@@ -70,6 +70,13 @@ export default function Footer() {
                   </a>
                 </li>
               )}
+              {site.whatsapp && (
+                <li>
+                  <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer" className={lien}>
+                    WhatsApp ↗
+                  </a>
+                </li>
+              )}
               <li>
                 <Link href="/contact" className={lien}>
                   Formulaire de contact →

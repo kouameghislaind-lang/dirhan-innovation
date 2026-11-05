@@ -6,13 +6,27 @@ import AppelAction from "@/components/ui/AppelAction";
 import EnTeteSection from "@/components/ui/EnTeteSection";
 import Section from "@/components/ui/Section";
 import logo from "@/public/logo-dirhan.png";
-import { aPropos, engagements, site, valeurs } from "@/lib/site";
+import { aPropos, engagements, fondateur, manifeste, site, valeurs } from "@/lib/site";
 
 export const metadata: Metadata = metaPage(
   "À propos",
   "DIRHAN INNOVATION, agence digitale et technologique née à Abidjan : notre histoire, notre mission, notre vision et nos valeurs.",
   "/a-propos",
 );
+
+// Met en or les mots-clés du manifeste
+function texteManifeste() {
+  const motif = new RegExp(`(${manifeste.motsCles.join("|")})`, "g");
+  return manifeste.texte.split(motif).map((morceau, i) =>
+    manifeste.motsCles.includes(morceau) ? (
+      <span key={i} className="texte-or italic">
+        {morceau}
+      </span>
+    ) : (
+      morceau
+    ),
+  );
+}
 
 export default function PageAPropos() {
   return (
@@ -37,6 +51,16 @@ export default function PageAPropos() {
           }
           intro={site.description}
         />
+      </Section>
+
+      {/* ===== Manifeste ===== */}
+      <Section filet>
+        <Apparition>
+          <p className="surtitre">Notre manifeste</p>
+          <blockquote className="mt-8 max-w-5xl font-titre text-[clamp(1.75rem,1.1rem+2.4vw,3.25rem)] leading-[1.25] tracking-[-0.02em] text-blanc/90">
+            {texteManifeste()}
+          </blockquote>
+        </Apparition>
       </Section>
 
       {/* ===== Notre histoire ===== */}
@@ -65,6 +89,35 @@ export default function PageAPropos() {
           </div>
         </Apparition>
       </Section>
+
+      {/* ===== Le fondateur : s'affiche uniquement quand le nom est renseigné dans lib/site.ts ===== */}
+      {fondateur.nom && (
+        <Section filet conteneur="grid items-center gap-12 lg:grid-cols-12">
+          {fondateur.photo && (
+            <Apparition className="lg:col-span-5">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-grand)] border border-ligne">
+                <Image
+                  src={fondateur.photo}
+                  alt={`Portrait de ${fondateur.nom}`}
+                  fill
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            </Apparition>
+          )}
+          <Apparition delai={0.1} className={fondateur.photo ? "lg:col-span-6 lg:col-start-7" : "lg:col-span-8"}>
+            <p className="surtitre">Le fondateur</p>
+            <h2 className="titre-section mt-5">{fondateur.nom}</h2>
+            {fondateur.role && <p className="mt-3 text-gris">{fondateur.role}</p>}
+            {fondateur.citation && (
+              <blockquote className="mt-8 border-l-2 border-or pl-6 font-titre text-2xl italic leading-snug text-blanc/90">
+                « {fondateur.citation} »
+              </blockquote>
+            )}
+          </Apparition>
+        </Section>
+      )}
 
       {/* ===== Mission & vision ===== */}
       <Section fond="alterne" filet conteneur="grid gap-6 md:grid-cols-2">

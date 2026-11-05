@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { metaPage } from "@/lib/seo";
 import Apparition from "@/components/Apparition";
+import Icone from "@/components/Icone";
+import NavigationServices from "@/components/NavigationServices";
 import AppelAction from "@/components/ui/AppelAction";
 import Bouton from "@/components/ui/Bouton";
 import EnTeteSection from "@/components/ui/EnTeteSection";
@@ -53,40 +55,53 @@ export default function PageServices() {
         </Apparition>
       </Section>
 
-      {/* ===== Détail des 6 services ===== */}
+      {/* ===== Détail des 6 services =====
+          Ordinateur : sommaire fixe à gauche, services à droite.
+          Mobile : les raccourcis du haut de page servent de sommaire. */}
       <div className="border-t border-ligne">
-        {services.map((s, i) => (
-          <article
-            key={s.slug}
-            id={s.slug}
-            className={`scroll-mt-20 border-b border-ligne py-20 lg:py-28 ${i % 2 === 1 ? "bg-noir-clair" : ""}`}
-          >
-            <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-12">
-              <Apparition className="lg:col-span-5">
-                <span className="font-titre text-6xl font-bold text-blanc/15 sm:text-7xl">{s.numero}</span>
-                <h2 className="titre-bloc mt-4">{s.titre}</h2>
-                <p className="texte-intro mt-6">{s.detail}</p>
-                <Bouton href={actionPrincipale.href} variante="lien" fleche="droite" className="mt-6">
-                  {actionPrincipale.label}
-                </Bouton>
-              </Apparition>
+        <div className="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-12">
+          <aside className="hidden py-24 lg:col-span-3 lg:block">
+            <NavigationServices
+              elements={services.map(({ slug, titre, numero, icone }) => ({ slug, titre, numero, icone }))}
+            />
+          </aside>
 
-              <Apparition delai={0.1} className="lg:col-span-6 lg:col-start-7">
-                <div className="carte p-8 sm:p-10">
+          <div className="lg:col-span-9">
+            {services.map((s) => (
+              <article
+                key={s.slug}
+                id={s.slug}
+                className="scroll-mt-24 border-b border-ligne py-20 last:border-b-0 lg:py-24"
+              >
+                <Apparition>
+                  <div className="flex items-center gap-5">
+                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[var(--radius-petit)] border border-ligne bg-noir-eleve text-or">
+                      <Icone nom={s.icone} className="h-7 w-7" />
+                    </span>
+                    <span className="font-titre text-sm text-blanc/35">{s.numero} / 0{services.length}</span>
+                  </div>
+                  <h2 className="titre-bloc mt-8">{s.titre}</h2>
+                  <p className="texte-intro mt-5">{s.detail}</p>
+                </Apparition>
+
+                <Apparition delai={0.1} className="carte mt-10 p-8 sm:p-10">
                   <p className="surtitre">Ce que nous faisons</p>
-                  <ul className="mt-6 divide-y divide-[var(--color-ligne)]">
+                  <ul className="mt-6 grid gap-x-10 sm:grid-cols-2">
                     {s.prestations.map((p) => (
-                      <li key={p} className="flex items-center gap-4 py-4 text-blanc/90">
+                      <li key={p} className="flex items-center gap-4 border-b border-ligne py-4 text-blanc/90">
                         <span aria-hidden className="h-1.5 w-1.5 shrink-0 rotate-45 bg-or" />
                         {p}
                       </li>
                     ))}
                   </ul>
-                </div>
-              </Apparition>
-            </div>
-          </article>
-        ))}
+                  <Bouton href={actionPrincipale.href} variante="lien" fleche="droite" className="mt-6">
+                    {actionPrincipale.label}
+                  </Bouton>
+                </Apparition>
+              </article>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* ===== Notre méthode ===== */}

@@ -34,6 +34,20 @@ const chemins: Record<IconeNom, React.ReactNode> = {
       <path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z" />
     </>
   ),
+  marketing: (
+    <>
+      <path d="M4 19V5M4 19h16" />
+      <path d="M7.5 15l3.5-4 3 2.5L19 8" />
+      <path d="M15.5 8H19v3.5" />
+    </>
+  ),
+  ia: (
+    <>
+      <rect x="6" y="6" width="12" height="12" rx="2.5" />
+      <path d="M9.5 3v3M14.5 3v3M9.5 18v3M14.5 18v3M3 9.5h3M3 14.5h3M18 9.5h3M18 14.5h3" />
+      <path d="M12 9.2l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" />
+    </>
+  ),
   innovation: (
     <>
       <path d="M9 18h6M10 21h4" />
