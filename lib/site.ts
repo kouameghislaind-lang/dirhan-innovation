@@ -30,6 +30,9 @@ export const site = {
   telephone: "",
 };
 
+// L'action principale du site : un seul libellé partout, pour ne pas faire hésiter le visiteur
+export const actionPrincipale = { label: "Demander un devis", href: "/contact" };
+
 // ===== Page d'accueil =====
 export type IconeNom =
   | "web"

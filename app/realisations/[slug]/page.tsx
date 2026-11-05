@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Apparition from "@/components/Apparition";
 import BadgeStatut from "@/components/BadgeStatut";
+import AppelAction from "@/components/ui/AppelAction";
 import IllustrationProjet from "@/components/IllustrationProjet";
 import { metaPage } from "@/lib/seo";
 import { realisations, services } from "@/lib/site";
@@ -35,7 +36,7 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
   return (
     <>
       {/* ===== En-tête ===== */}
-      <section className="relative overflow-hidden pt-36 pb-16">
+      <section className="relative overflow-hidden pt-36 pb-16 lg:pt-44 lg:pb-20">
         <div
           aria-hidden
           className="pointer-events-none absolute -top-32 right-0 h-[30rem] w-[30rem] rounded-full bg-or/10 blur-[120px]"
@@ -43,7 +44,7 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
         <div className="relative mx-auto max-w-7xl px-6">
           <Apparition immediat>
             <nav aria-label="Fil d'Ariane" className="text-sm text-gris">
-              <Link href="/realisations" className="inline-block py-2 transition-colors hover:text-or">
+              <Link href="/realisations" className="inline-block py-2 transition-colors hover:text-blanc">
                 ← Toutes les réalisations
               </Link>
             </nav>
@@ -53,16 +54,14 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
             <Apparition immediat delai={0.05}>
               <div className="flex flex-wrap items-center gap-3">
                 <BadgeStatut statut={projet.statut} />
-                <span className="text-xs font-semibold uppercase tracking-[0.25em] text-or">
-                  {projet.categorie}
-                </span>
+                <span className="surtitre">{projet.categorie}</span>
               </div>
-              <h1 className="mt-6 font-titre text-4xl font-bold leading-[1.1] sm:text-5xl lg:text-6xl">
+              <h1 className="titre-affiche mt-6">
                 {projet.titre}
               </h1>
-              <p className="mt-6 text-lg leading-relaxed text-gris">{projet.resume}</p>
+              <p className="texte-intro mt-6">{projet.resume}</p>
 
-              <dl className="mt-10 grid grid-cols-2 gap-6 border-t border-or/15 pt-8 text-sm">
+              <dl className="mt-10 grid grid-cols-2 gap-6 border-t border-ligne pt-8 text-sm">
                 <div>
                   <dt className="text-xs uppercase tracking-[0.25em] text-or">Statut</dt>
                   <dd className="mt-2 text-blanc/90">{projet.statutDetail}</dd>
@@ -77,7 +76,7 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
                     <dd className="mt-2">
                       <Link
                         href={`/services#${service.slug}`}
-                        className="-my-1 inline-block py-1 text-blanc/90 underline decoration-or/40 underline-offset-4 hover:text-or"
+                        className="-my-1 inline-block py-1 text-blanc/90 underline decoration-or/40 underline-offset-4 transition-colors hover:text-or"
                       >
                         {service.titre}
                       </Link>
@@ -94,7 +93,7 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
             </Apparition>
 
             <Apparition immediat delai={0.15}>
-              <div className="relative overflow-hidden rounded-3xl border border-or/25 shadow-[0_30px_80px_-30px_rgba(212,175,55,0.35)]">
+              <div className="relative overflow-hidden rounded-[var(--radius-grand)] border border-ligne-forte shadow-[0_30px_80px_-30px_rgba(212,175,55,0.35)]">
                 <div className="relative aspect-[16/10]">
                   {projet.image ? (
                     <Image
@@ -119,17 +118,17 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
       </section>
 
       {/* ===== Axes du projet ===== */}
-      <section className="border-t border-or/10 bg-noir-clair py-20">
+      <section className="border-t border-ligne bg-noir-clair py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6">
           <Apparition>
-            <h2 className="font-titre text-3xl font-bold sm:text-4xl">Les axes du projet</h2>
+            <h2 className="titre-section">Les axes du projet</h2>
           </Apparition>
           <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {projet.axes.map((axe, i) => (
               <li key={axe}>
-                <Apparition delai={i * 0.08} className="h-full rounded-2xl border border-or/15 bg-noir p-6">
-                  <span className="font-titre text-sm text-or">0{i + 1}</span>
-                  <p className="mt-3 font-titre text-xl font-semibold">{axe}</p>
+                <Apparition delai={i * 0.08} className="carte h-full p-6">
+                  <span className="font-titre text-sm text-blanc/35">0{i + 1}</span>
+                  <p className="titre-carte mt-3">{axe}</p>
                 </Apparition>
               </li>
             ))}
@@ -143,19 +142,19 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
 
       {/* ===== Autres projets ===== */}
       {autres.length > 0 && (
-        <section className="border-t border-or/10 py-20">
+        <section className="border-t border-ligne py-24 lg:py-32">
           <div className="mx-auto max-w-7xl px-6">
-            <h2 className="font-titre text-3xl font-bold">Autres projets</h2>
+            <h2 className="titre-bloc">Autres projets</h2>
             <ul className="mt-8 grid gap-4 md:grid-cols-2">
               {autres.map((p) => (
                 <li key={p.slug}>
                   <Link
                     href={`/realisations/${p.slug}`}
-                    className="group flex items-center justify-between gap-6 rounded-2xl border border-or/15 bg-noir-carte p-6 transition-colors hover:border-or/50"
+                    className="carte carte-interactive group flex items-center justify-between gap-6 p-6"
                   >
                     <div>
                       <BadgeStatut statut={p.statut} />
-                      <p className="mt-4 font-titre text-xl font-semibold transition-colors group-hover:text-or">
+                      <p className="titre-carte mt-4 transition-colors group-hover:text-or">
                         {p.titre}
                       </p>
                       <p className="mt-1 text-sm text-gris">{p.categorie}</p>
@@ -172,19 +171,13 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
       )}
 
       {/* ===== Appel à l'action ===== */}
-      <section className="border-t border-or/10 bg-noir-clair py-24">
-        <Apparition className="mx-auto max-w-4xl px-6 text-center">
-          <h2 className="font-titre text-4xl font-bold sm:text-5xl">
+      <AppelAction
+        titre={
+          <>
             Un projet similaire ? <span className="texte-or italic">Parlons-en.</span>
-          </h2>
-          <Link
-            href="/contact"
-            className="mt-10 inline-block rounded-full bg-or px-10 py-4 font-semibold text-noir transition-colors hover:bg-or-clair"
-          >
-            Démarrer un projet
-          </Link>
-        </Apparition>
-      </section>
+          </>
+        }
+      />
     </>
   );
 }

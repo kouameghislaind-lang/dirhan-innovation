@@ -5,17 +5,123 @@
   Ces "tokens" créent des classes Tailwind : bg-noir, text-or, border-or/30, etc.
 */
 @theme {
-  --color-noir: #080808;
-  --color-noir-clair: #121212;
-  --color-noir-carte: #161616;
+  /* Couleurs de marque */
   --color-or: #d4af37;
   --color-or-clair: #e8c95f;
   --color-or-fonce: #a8862a;
   --color-blanc: #ffffff;
   --color-gris: #a3a3a3;
 
+  /* 4 niveaux de profondeur, du plus profond au plus proche */
+  --color-noir: #080808; /* fond du site */
+  --color-noir-clair: #0e0e0e; /* sections alternées */
+  --color-noir-carte: #151515; /* cartes */
+  --color-noir-eleve: #1c1c1c; /* éléments survolés ou au premier plan */
+
+  /* Filets neutres : l'or est réservé aux accents */
+  --color-ligne: rgb(255 255 255 / 0.08);
+  --color-ligne-forte: rgb(255 255 255 / 0.16);
+
+  /* Arrondis : 3 tailles seulement */
+  --radius-petit: 0.75rem;
+  --radius-carte: 1.25rem;
+  --radius-grand: 2rem;
+
   --font-titre: var(--font-playfair);
   --font-sans: var(--font-inter);
+}
+
+/* ============================================================
+   SYSTÈME TYPOGRAPHIQUE
+   4 styles de titres et 2 styles de texte, utilisés partout.
+   ============================================================ */
+
+/* Grand titre de page (h1) */
+@utility titre-affiche {
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: clamp(2.25rem, 1.2rem + 3.4vw, 4.25rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+/* Titre de section (h2) */
+@utility titre-section {
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: clamp(2rem, 1.4rem + 1.9vw, 3.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* Titre de bloc important (h2/h3 dans une page) */
+@utility titre-bloc {
+  font-family: var(--font-titre);
+  font-weight: 700;
+  font-size: clamp(1.625rem, 1.3rem + 1vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+/* Titre de carte (h3) */
+@utility titre-carte {
+  font-family: var(--font-titre);
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* Petit titre en capitales au-dessus des titres */
+@utility surtitre {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-or);
+}
+
+/* Paragraphe d'introduction, largeur de lecture confortable */
+@utility texte-intro {
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-gris);
+  max-width: 40rem;
+  text-wrap: pretty;
+}
+
+/* ============================================================
+   SURFACES
+   ============================================================ */
+
+/* Carte standard : fond légèrement relevé, filet neutre, reflet en haut */
+@utility carte {
+  border-radius: var(--radius-carte);
+  border: 1px solid var(--color-ligne);
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 0.035), transparent 40%),
+    var(--color-noir-carte);
+}
+
+/* Carte cliquable : le filet devient doré au survol */
+@utility carte-interactive {
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    transform 0.4s ease;
+  &:hover {
+    border-color: rgb(212 175 55 / 0.45);
+    box-shadow: 0 24px 60px -28px rgb(212 175 55 / 0.4);
+  }
+}
+
+/* Paragraphes : coupure des lignes plus harmonieuse */
+p {
+  text-wrap: pretty;
 }
 
 html {

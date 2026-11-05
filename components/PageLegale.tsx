@@ -16,18 +16,18 @@ export function PageLegale({
   children: ReactNode;
 }) {
   return (
-    <section className="pt-40 pb-28">
+    <section className="pt-36 pb-24 lg:pt-44 lg:pb-32">
       <div className="mx-auto max-w-3xl px-6">
         <div className="apparition-immediate">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-or">{surtitre}</p>
-          <h1 className="mt-4 font-titre text-4xl font-bold leading-tight sm:text-5xl">{titre}</h1>
-          <p className="mt-6 text-lg leading-relaxed text-gris">{intro}</p>
+          <p className="surtitre">{surtitre}</p>
+          <h1 className="titre-affiche mt-5">{titre}</h1>
+          <p className="texte-intro mt-6">{intro}</p>
           <p className="mt-4 text-sm text-gris">Dernière mise à jour : {entreprise.dateMiseAJour}</p>
 
           {/* Avertissement : document à faire relire */}
           <div
             role="note"
-            className="mt-8 rounded-2xl border border-or/30 bg-or/5 px-5 py-4 text-sm leading-relaxed text-blanc/80"
+            className="mt-8 rounded-[var(--radius-petit)] border border-or/30 bg-or/5 px-5 py-4 text-sm leading-relaxed text-blanc/80"
           >
             <p className="font-semibold text-or">Document en cours de finalisation</p>
             <p className="mt-1">
@@ -42,20 +42,20 @@ export function PageLegale({
 
         <nav
           aria-label="Pages légales"
-          className="mt-16 flex flex-wrap gap-3 border-t border-or/15 pt-8"
+          className="mt-16 flex flex-wrap gap-3 border-t border-ligne pt-8"
         >
           {liensLegaux.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className="rounded-full border border-or/25 px-4 py-2 text-sm text-blanc/80 transition-colors hover:border-or hover:text-or"
+              className="inline-flex h-10 items-center rounded-full border border-ligne-forte px-5 text-sm text-blanc/80 transition-colors hover:border-or hover:text-or"
             >
               {l.label}
             </Link>
           ))}
           <Link
             href="/contact"
-            className="rounded-full border border-or/25 px-4 py-2 text-sm text-blanc/80 transition-colors hover:border-or hover:text-or"
+            className="inline-flex h-10 items-center rounded-full border border-ligne-forte px-5 text-sm text-blanc/80 transition-colors hover:border-or hover:text-or"
           >
             Nous contacter
           </Link>
@@ -69,8 +69,8 @@ export function PageLegale({
 export function Article({ numero, titre, children }: { numero: number; titre: string; children: ReactNode }) {
   return (
     <section aria-labelledby={`article-${numero}`}>
-      <h2 id={`article-${numero}`} className="flex items-baseline gap-4 font-titre text-2xl font-bold sm:text-3xl">
-        <span className="font-titre text-base text-or">{String(numero).padStart(2, "0")}</span>
+      <h2 id={`article-${numero}`} className="titre-bloc flex items-baseline gap-4">
+        <span className="font-titre text-base text-blanc/35">{String(numero).padStart(2, "0")}</span>
         {titre}
       </h2>
       <div className="mt-5 space-y-4 leading-relaxed text-blanc/80 [&_a]:text-or [&_a]:underline [&_a]:decoration-or/40 [&_a]:underline-offset-4 [&_li]:pl-1 [&_li]:marker:text-or [&_strong]:text-blanc [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5">
@@ -83,7 +83,7 @@ export function Article({ numero, titre, children }: { numero: number; titre: st
 // Tableau "étiquette : valeur"
 export function Fiche({ lignes }: { lignes: [string, ReactNode][] }) {
   return (
-    <dl className="divide-y divide-blanc/10 overflow-hidden rounded-2xl border border-or/15 bg-noir-carte">
+    <dl className="carte divide-y divide-[var(--color-ligne)] overflow-hidden">
       {lignes.map(([etiquette, valeur]) => (
         <div key={etiquette} className="grid gap-1 px-6 py-4 sm:grid-cols-3 sm:gap-6">
           <dt className="text-sm text-gris">{etiquette}</dt>

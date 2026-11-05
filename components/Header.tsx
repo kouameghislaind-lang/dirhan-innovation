@@ -8,7 +8,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import Logo from "@/components/Logo";
-import { navigation } from "@/lib/site";
+import Bouton from "@/components/ui/Bouton";
+import { actionPrincipale, navigation } from "@/lib/site";
 
 export default function Header() {
   const pathname = usePathname();
@@ -41,7 +42,7 @@ export default function Header() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         defile || menuOuvert
-          ? "border-b border-or/15 bg-noir/90 backdrop-blur-md"
+          ? "border-b border-ligne bg-noir/85 backdrop-blur-xl"
           : "border-b border-transparent bg-transparent"
       }`}
     >
@@ -55,15 +56,15 @@ export default function Header() {
               <li key={lien.href}>
                 <Link
                   href={lien.href}
-                  className={`relative text-sm font-medium tracking-wide transition-colors hover:text-or ${
-                    estActif(lien.href) ? "text-or" : "text-blanc/80"
+                  className={`relative py-2 text-sm font-medium tracking-wide transition-colors hover:text-blanc ${
+                    estActif(lien.href) ? "text-blanc" : "text-blanc/65"
                   }`}
                 >
                   {lien.label}
                   {estActif(lien.href) && (
                     <motion.span
                       layoutId="soulignement"
-                      className="absolute -bottom-2 left-0 h-px w-full bg-or"
+                      className="absolute -bottom-0.5 left-0 h-px w-full bg-or"
                     />
                   )}
                 </Link>
@@ -72,12 +73,9 @@ export default function Header() {
           </ul>
         </nav>
 
-        <Link
-          href="/contact"
-          className="hidden rounded-full bg-or px-5 py-2.5 text-sm font-semibold text-noir transition-colors hover:bg-or-clair lg:inline-block"
-        >
-          Démarrer un projet
-        </Link>
+        <Bouton href={actionPrincipale.href} taille="compact" className="hidden lg:inline-flex">
+          {actionPrincipale.label}
+        </Bouton>
 
         {/* Bouton "hamburger" pour le mobile */}
         <button
@@ -119,7 +117,7 @@ export default function Header() {
                   <Link
                     href={lien.href}
                     onClick={fermerMenu}
-                    className={`block border-b border-or/10 py-4 font-titre text-2xl ${
+                    className={`block border-b border-ligne py-4 font-titre text-2xl ${
                       estActif(lien.href) ? "text-or" : "text-blanc"
                     }`}
                   >
@@ -128,13 +126,9 @@ export default function Header() {
                 </li>
               ))}
               <li className="pt-6">
-                <Link
-                  href="/contact"
-                  onClick={fermerMenu}
-                  className="block rounded-full bg-or px-5 py-3 text-center font-semibold text-noir"
-                >
-                  Démarrer un projet
-                </Link>
+                <Bouton href={actionPrincipale.href} onClick={fermerMenu} className="w-full">
+                  {actionPrincipale.label}
+                </Bouton>
               </li>
             </ul>
           </motion.nav>

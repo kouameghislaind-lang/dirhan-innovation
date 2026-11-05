@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Bouton from "@/components/ui/Bouton";
 
 export const metadata: Metadata = {
   title: "Page introuvable",
@@ -12,18 +12,15 @@ export default function PageIntrouvable() {
     <section className="flex min-h-[80vh] items-center justify-center px-6 pt-20 text-center">
       <div>
         <p className="font-titre text-7xl font-bold texte-or">404</p>
-        <h1 className="mt-6 font-titre text-3xl font-bold">
+        <h1 className="titre-bloc mt-6">
           Cette page est en préparation.
         </h1>
         <p className="mx-auto mt-4 max-w-md text-gris">
           Elle arrive très bientôt. En attendant, revenez à l&apos;accueil.
         </p>
-        <Link
-          href="/"
-          className="mt-10 inline-block rounded-full bg-or px-8 py-3 font-semibold text-noir transition-colors hover:bg-or-clair"
-        >
+        <Bouton href="/" className="mt-10">
           Retour à l&apos;accueil
-        </Link>
+        </Bouton>
       </div>
     </section>
   );

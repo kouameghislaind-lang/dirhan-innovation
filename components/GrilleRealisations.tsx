@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Bouton from "@/components/ui/Bouton";
 import { AnimatePresence, motion } from "framer-motion";
 import BadgeStatut from "@/components/BadgeStatut";
 import IllustrationProjet from "@/components/IllustrationProjet";
@@ -35,8 +35,8 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
                 type="button"
                 onClick={() => setFiltre(b.nom)}
                 aria-pressed={actif}
-                className={`relative rounded-full border px-5 py-2.5 text-sm font-medium transition-colors ${
-                  actif ? "border-or text-noir" : "border-or/25 text-blanc/80 hover:border-or hover:text-or"
+                className={`relative inline-flex h-10 items-center rounded-full border px-5 text-sm font-medium transition-colors ${
+                  actif ? "border-or text-noir" : "border-ligne-forte text-blanc/80 hover:border-or hover:text-or"
                 }`}
               >
                 {actif && (
@@ -69,7 +69,7 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
               <motion.article
                 whileHover={{ y: -8 }}
                 transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-or/15 bg-noir-carte transition-[border-color,box-shadow] duration-500 hover:border-or/50 hover:shadow-[0_24px_60px_-20px_rgba(212,175,55,0.35)]"
+                className="carte carte-interactive group relative flex h-full flex-col overflow-hidden"
               >
                 {/* Visuel */}
                 <div className="relative aspect-[16/10] overflow-hidden">
@@ -96,22 +96,23 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
 
                 {/* Texte */}
                 <div className="flex flex-1 flex-col p-7">
-                  <p className="text-xs font-semibold uppercase tracking-[0.25em] text-or">{p.categorie}</p>
-                  <h3 className="mt-3 font-titre text-2xl font-semibold transition-colors group-hover:text-or">
+                  <p className="surtitre">{p.categorie}</p>
+                  <h3 className="titre-carte mt-3 transition-colors group-hover:text-or">
                     {p.titre}
                   </h3>
                   <p className="mt-1 text-sm text-gris">{p.client}</p>
                   <p className="mt-4 flex-1 leading-relaxed text-blanc/80">{p.resume}</p>
 
-                  <Link
+                  <Bouton
                     href={`/realisations/${p.slug}`}
-                    className="mt-7 inline-flex items-center gap-3 self-start rounded-full border border-or/40 px-5 py-2.5 text-sm font-semibold text-or transition-colors after:absolute after:inset-0 hover:bg-or hover:text-noir"
+                    variante="accent"
+                    taille="compact"
+                    fleche="droite"
+                    etirer
+                    className="mt-7 self-start"
                   >
                     Découvrir le projet
-                    <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
-                      →
-                    </span>
-                  </Link>
+                  </Bouton>
                 </div>
               </motion.article>
             </motion.li>

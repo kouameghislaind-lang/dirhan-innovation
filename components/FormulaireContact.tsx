@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import Bouton from "@/components/ui/Bouton";
 import { envoyerMessage, type EtatContact } from "@/app/contact/actions";
 import { services } from "@/lib/site";
 
@@ -13,7 +14,7 @@ const etatInitial: EtatContact = {
 };
 
 const styleChamp =
-  "w-full rounded-xl border bg-noir px-4 py-3.5 text-blanc placeholder:text-blanc/30 outline-none transition-colors focus:border-or focus:ring-1 focus:ring-or";
+  "w-full rounded-[var(--radius-petit)] border bg-noir px-4 py-3.5 text-blanc placeholder:text-blanc/45 outline-none transition-colors focus:border-or focus:ring-1 focus:ring-or";
 
 function Champ({
   id,
@@ -49,7 +50,7 @@ export default function FormulaireContact() {
   const { erreurs, valeurs } = etat;
 
   const bordure = (cle: keyof typeof erreurs) =>
-    erreurs[cle] ? "border-red-400/70" : "border-blanc/15";
+    erreurs[cle] ? "border-red-400/70" : "border-ligne-forte";
   const aria = (cle: keyof typeof erreurs) =>
     erreurs[cle] ? { "aria-invalid": true, "aria-describedby": `${cle}-erreur` } : {};
 
@@ -108,7 +109,7 @@ export default function FormulaireContact() {
             autoComplete="organization"
             defaultValue={valeurs.entreprise}
             placeholder="Nom de votre structure"
-            className={`${styleChamp} border-blanc/15`}
+            className={`${styleChamp} border-ligne-forte`}
           />
         </Champ>
       </div>
@@ -168,16 +169,12 @@ export default function FormulaireContact() {
           </Link>
           ).
         </p>
-        <button
-          type="submit"
-          disabled={envoiEnCours}
-          className="inline-flex shrink-0 items-center justify-center gap-3 whitespace-nowrap rounded-full bg-or px-8 py-4 font-semibold text-noir transition-colors hover:bg-or-clair disabled:cursor-wait disabled:opacity-70"
-        >
+        <Bouton type="submit" disabled={envoiEnCours}>
           {envoiEnCours && (
             <span className="h-4 w-4 animate-spin rounded-full border-2 border-noir/30 border-t-noir" />
           )}
           {envoiEnCours ? "Envoi en cours…" : "Envoyer le message"}
-        </button>
+        </Bouton>
       </div>
 
       <div aria-live="polite">
