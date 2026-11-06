@@ -5,6 +5,7 @@
 
 import { headers } from "next/headers";
 import { autoriserEnvoi, identifierVisiteur } from "@/lib/limiteEnvois";
+import { emailDemandeDevis } from "@/lib/emails/demandeDevis";
 import { LIMITES_FORMULAIRE } from "@/lib/limitesFormulaire";
 import { services, site } from "@/lib/site";
 
@@ -76,16 +77,6 @@ const champsVides: ChampsContact = {
 function lire(formData: FormData, cle: string, max: number) {
   const valeur = formData.get(cle);
   return typeof valeur === "string" ? valeur.trim().slice(0, max) : "";
-}
-
-// Empêche qu'un texte tapé dans le formulaire soit interprété comme du code dans l'e-mail
-function echapper(texte: string) {
-  return texte
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }
 
 // Point d'entrée appelé par le formulaire
@@ -174,39 +165,9 @@ async function traiterMessage(
     };
   }
 
-  const lignes: [string, string][] = [
-    ["Nom", valeurs.nom],
-    ["E-mail", valeurs.email],
-    ["Téléphone", valeurs.telephone || "Non renseigné"],
-    ["Entreprise", valeurs.entreprise || "Non renseignée"],
-    ["Service souhaité", valeurs.service || "Non précisé"],
-  ];
-
-  const html = `
-    <div style="font-family:Arial,sans-serif;color:#080808">
-      <h2 style="color:#a8862a">Nouveau message depuis le site DIRHAN INNOVATION</h2>
-      <table cellpadding="6">${lignes
-        .map(([k, v]) => `<tr><td><strong>${k}</strong></td><td>${echapper(v)}</td></tr>`)
-        .join("")}</table>
-      <h3>Message</h3>
-      <p style="white-space:pre-wrap">${echapper(valeurs.message)}</p>
-    </div>`;
-
-  // Version texte de l'e-mail (améliore la délivrabilité et l'affichage sur certaines messageries)
-  const texte = [
-    "Nouveau message depuis le site DIRHAN INNOVATION",
-    "",
-    ...lignes.map(([k, v]) => `${k} : ${v}`),
-    "",
-    "Message :",
-    valeurs.message,
-  ].join("\n");
-
-  // Objet sur une seule ligne : les retours à la ligne éventuels sont remplacés par des espaces
-  const surUneLigne = (t: string) => t.replace(/\s+/g, " ").trim();
-  const objet = surUneLigne(
-    `Nouveau projet : ${valeurs.nom}${valeurs.service ? ` (${valeurs.service})` : ""}`,
-  ).slice(0, 150);
+  // E-mail « Nouvelle demande de devis » : objet, version HTML premium et version texte
+  // (modèle et échappement des données dans lib/emails/demandeDevis.ts)
+  const { objet, html, texte } = emailDemandeDevis(valeurs);
 
   const debutEnvoi = Date.now();
   try {
