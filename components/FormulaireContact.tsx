@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import Link from "next/link";
 import Bouton from "@/components/ui/Bouton";
 import { envoyerMessage, type EtatContact } from "@/app/contact/actions";
+import { LIMITES_FORMULAIRE } from "@/lib/limitesFormulaire";
 import { services } from "@/lib/site";
 
 const etatInitial: EtatContact = {
@@ -67,6 +68,7 @@ export default function FormulaireContact() {
           <input
             id="nom"
             name="nom"
+            maxLength={LIMITES_FORMULAIRE.nom}
             type="text"
             autoComplete="name"
             required
@@ -80,6 +82,7 @@ export default function FormulaireContact() {
           <input
             id="email"
             name="email"
+            maxLength={LIMITES_FORMULAIRE.email}
             type="email"
             autoComplete="email"
             required
@@ -93,6 +96,7 @@ export default function FormulaireContact() {
           <input
             id="telephone"
             name="telephone"
+            maxLength={LIMITES_FORMULAIRE.telephone}
             type="tel"
             autoComplete="tel"
             defaultValue={valeurs.telephone}
@@ -105,6 +109,7 @@ export default function FormulaireContact() {
           <input
             id="entreprise"
             name="entreprise"
+            maxLength={LIMITES_FORMULAIRE.entreprise}
             type="text"
             autoComplete="organization"
             defaultValue={valeurs.entreprise}
@@ -147,6 +152,7 @@ export default function FormulaireContact() {
         <textarea
           id="message"
           name="message"
+            maxLength={LIMITES_FORMULAIRE.message}
           rows={6}
           required
           defaultValue={valeurs.message}
@@ -181,7 +187,7 @@ export default function FormulaireContact() {
         {/* Message de résultat : affiché immédiatement, avec une courte apparition en CSS */}
         {etat.statut !== "initial" && (
           <p
-            key={etat.message}
+            key={`${etat.statut}-${etat.horodatage}`}
             className={`apparition-message rounded-xl border px-5 py-4 text-sm ${
               etat.statut === "succes"
                 ? "border-or/40 bg-or/10 text-or-clair"

@@ -5,6 +5,7 @@
 
 import { headers } from "next/headers";
 import { autoriserEnvoi, identifierVisiteur } from "@/lib/limiteEnvois";
+import { LIMITES_FORMULAIRE } from "@/lib/limitesFormulaire";
 import { services, site } from "@/lib/site";
 
 // Délai maximal accordé à Resend pour répondre (en millisecondes)
@@ -24,6 +25,9 @@ export type EtatContact = {
   message: string;
   erreurs: Partial<Record<keyof ChampsContact, string>>;
   valeurs: ChampsContact;
+  // Horodatage de la réponse : rend chaque réponse unique, pour que le message
+  // de confirmation s'affiche à nouveau même s'il est identique au précédent
+  horodatage?: number;
 };
 
 const champsVides: ChampsContact = {
@@ -50,7 +54,16 @@ function echapper(texte: string) {
     .replace(/'/g, "&#39;");
 }
 
+// Point d'entrée appelé par le formulaire
 export async function envoyerMessage(
+  etatPrecedent: EtatContact,
+  formData: FormData,
+): Promise<EtatContact> {
+  const resultat = await traiterMessage(etatPrecedent, formData);
+  return { ...resultat, horodatage: Date.now() };
+}
+
+async function traiterMessage(
   _etatPrecedent: EtatContact,
   formData: FormData,
 ): Promise<EtatContact> {
@@ -62,12 +75,12 @@ export async function envoyerMessage(
 
   // 2. Récupération des champs (avec une longueur maximale pour éviter les abus)
   const valeurs: ChampsContact = {
-    nom: lire(formData, "nom", 100),
-    email: lire(formData, "email", 150),
-    telephone: lire(formData, "telephone", 30),
-    entreprise: lire(formData, "entreprise", 120),
-    service: lire(formData, "service", 80),
-    message: lire(formData, "message", 5000),
+    nom: lire(formData, "nom", LIMITES_FORMULAIRE.nom),
+    email: lire(formData, "email", LIMITES_FORMULAIRE.email),
+    telephone: lire(formData, "telephone", LIMITES_FORMULAIRE.telephone),
+    entreprise: lire(formData, "entreprise", LIMITES_FORMULAIRE.entreprise),
+    service: lire(formData, "service", LIMITES_FORMULAIRE.service),
+    message: lire(formData, "message", LIMITES_FORMULAIRE.message),
   };
 
   // 3. Vérifications
@@ -140,6 +153,22 @@ export async function envoyerMessage(
       <p style="white-space:pre-wrap">${echapper(valeurs.message)}</p>
     </div>`;
 
+  // Version texte de l'e-mail (améliore la délivrabilité et l'affichage sur certaines messageries)
+  const texte = [
+    "Nouveau message depuis le site DIRHAN INNOVATION",
+    "",
+    ...lignes.map(([k, v]) => `${k} : ${v}`),
+    "",
+    "Message :",
+    valeurs.message,
+  ].join("\n");
+
+  // Objet sur une seule ligne : les retours à la ligne éventuels sont remplacés par des espaces
+  const surUneLigne = (t: string) => t.replace(/\s+/g, " ").trim();
+  const objet = surUneLigne(
+    `Nouveau projet : ${valeurs.nom}${valeurs.service ? ` (${valeurs.service})` : ""}`,
+  ).slice(0, 150);
+
   try {
     const reponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -153,8 +182,9 @@ export async function envoyerMessage(
         from: expediteur,
         to: [destinataire],
         reply_to: valeurs.email,
-        subject: `Nouveau projet : ${valeurs.nom}${valeurs.service ? ` (${valeurs.service})` : ""}`,
+        subject: objet,
         html,
+        text: texte,
       }),
     });
 
