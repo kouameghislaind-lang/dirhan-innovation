@@ -4,7 +4,9 @@
 // Les visiteurs ne peuvent donc pas voir la clé secrète qui sert à envoyer les e-mails.
 
 import { headers } from "next/headers";
+import { after } from "next/server";
 import { autoriserEnvoi, identifierVisiteur } from "@/lib/limiteEnvois";
+import { emailConfirmationProspect } from "@/lib/emails/confirmationProspect";
 import { emailDemandeDevis } from "@/lib/emails/demandeDevis";
 import { LIMITES_FORMULAIRE } from "@/lib/limitesFormulaire";
 import { services, site } from "@/lib/site";
@@ -165,34 +167,99 @@ async function traiterMessage(
     };
   }
 
-  // E-mail « Nouvelle demande de devis » : objet, version HTML premium et version texte
-  // (modèle et échappement des données dans lib/emails/demandeDevis.ts)
-  const { objet, html, texte } = emailDemandeDevis(valeurs);
+  // 5. E-mail INTERNE « Nouvelle demande de devis » (modèle dans lib/emails/demandeDevis.ts)
+  const demande = emailDemandeDevis(valeurs);
+  const envoiInterne = await envoyerViaResend(cleApi, {
+    from: expediteur,
+    to: destinataire,
+    replyTo: valeurs.email,
+    ...demande,
+  });
 
-  const debutEnvoi = Date.now();
+  if (!envoiInterne.ok) {
+    return {
+      statut: "erreur",
+      message: `Votre message n'a pas pu être envoyé. Merci de réessayer dans quelques instants, ou de nous appeler au ${site.telephone}.`,
+      erreurs: {},
+      valeurs,
+    };
+  }
+
+  // 6. CONFIRMATION au prospect, exécutée APRÈS la réponse au visiteur (after) :
+  //    - elle ne ralentit pas le formulaire ;
+  //    - si elle échoue, la demande de devis, déjà reçue, n'est PAS annulée (simple avertissement dans les journaux).
+  const confirmation = emailConfirmationProspect(valeurs);
+  after(async () => {
+    if (!confirmationPossible(expediteur, valeurs.email, destinataire)) {
+      console.info(
+        "[Formulaire de contact] Confirmation au prospect non envoyée : l'expéditeur de test onboarding@resend.dev ne peut écrire qu'à l'adresse du compte Resend. Elle sera active avec un domaine vérifié (CONTACT_EMAIL_EXPEDITEUR).",
+      );
+      return;
+    }
+    const envoiConfirmation = await envoyerViaResend(cleApi, {
+      from: expediteur,
+      to: valeurs.email,
+      ...confirmation,
+    });
+    if (!envoiConfirmation.ok) {
+      console.warn("[Formulaire de contact] La confirmation au prospect n'a pas pu être envoyée (la demande de devis, elle, a bien été reçue).");
+    } else {
+      console.info("[Formulaire de contact] Confirmation envoyée au prospect.");
+    }
+  });
+
+  return {
+    statut: "succes",
+    message: "Merci, votre message a bien été envoyé. Nous vous répondons très vite.",
+    erreurs: {},
+    valeurs: champsVides,
+  };
+}
+
+// ===== Envoi d'un e-mail via l'API Resend (utilisé pour les deux e-mails) =====
+
+type EmailAEnvoyer = {
+  from: string;
+  to: string;
+  replyTo?: string;
+  objet: string;
+  html: string;
+  texte: string;
+};
+
+type ResultatEnvoi = { ok: true; id?: string } | { ok: false };
+
+/**
+ * Envoie un e-mail via Resend, avec un délai maximal de 10 s.
+ * Ne lève jamais d'erreur : renvoie { ok: false } en cas d'échec, après l'avoir journalisé
+ * (code HTTP, type et message de Resend ; la clé n'apparaît jamais dans les journaux).
+ */
+async function envoyerViaResend(cleApi: string, email: EmailAEnvoyer): Promise<ResultatEnvoi> {
+  const nature = email.replyTo ? "demande interne" : "confirmation prospect";
+  const debut = Date.now();
   try {
-    if (DIAGNOSTIC_ACTIF) console.info("[Formulaire de contact][diagnostic] Appel de Resend…");
+    if (DIAGNOSTIC_ACTIF) console.info(`[Formulaire de contact][diagnostic] Appel de Resend (${nature})…`);
     const reponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
-      // Au-delà de 10 secondes sans réponse, on abandonne et on prévient le visiteur
+      // Au-delà de 10 secondes sans réponse, on abandonne
       signal: AbortSignal.timeout(DELAI_RESEND),
       headers: {
         Authorization: `Bearer ${cleApi}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: expediteur,
-        to: [destinataire],
-        reply_to: valeurs.email,
-        subject: objet,
-        html,
-        text: texte,
+        from: email.from,
+        to: [email.to],
+        ...(email.replyTo ? { reply_to: email.replyTo } : {}),
+        subject: email.objet,
+        html: email.html,
+        text: email.texte,
       }),
     });
 
     if (DIAGNOSTIC_ACTIF) {
       console.info(
-        `[Formulaire de contact][diagnostic] Réponse de Resend reçue : code HTTP ${reponse.status} en ${Date.now() - debutEnvoi} ms`,
+        `[Formulaire de contact][diagnostic] Réponse de Resend (${nature}) : code HTTP ${reponse.status} en ${Date.now() - debut} ms`,
       );
     }
 
@@ -206,36 +273,36 @@ async function traiterMessage(
         detail = { message: corps.slice(0, 300) };
       }
       console.error(
-        "[Formulaire de contact] Erreur Resend :",
+        `[Formulaire de contact] Erreur Resend (${nature}) :`,
         JSON.stringify({ codeHttp: reponse.status, type: detail.name, message: detail.message }),
       );
-      throw new Error("Envoi refusé");
+      return { ok: false };
     }
 
+    const { id } = (await reponse.json().catch(() => ({}))) as { id?: string };
     if (DIAGNOSTIC_ACTIF) {
-      const { id } = (await reponse.json().catch(() => ({}))) as { id?: string };
-      console.info("[Formulaire de contact][diagnostic] E-mail accepté par Resend, identifiant :", id ?? "(inconnu)");
+      console.info(`[Formulaire de contact][diagnostic] E-mail accepté par Resend (${nature}), identifiant :`, id ?? "(inconnu)");
     }
+    return { ok: true, id };
   } catch (erreur) {
     const delaiDepasse = erreur instanceof Error && erreur.name === "TimeoutError";
     console.error(
       delaiDepasse
-        ? `[Formulaire de contact] Resend n'a pas répondu en ${DELAI_RESEND / 1000} s (arrêt après ${Date.now() - debutEnvoi} ms).`
-        : "[Formulaire de contact] Échec de l'envoi :",
+        ? `[Formulaire de contact] Resend n'a pas répondu en ${DELAI_RESEND / 1000} s (${nature}, arrêt après ${Date.now() - debut} ms).`
+        : `[Formulaire de contact] Échec de l'envoi (${nature}) :`,
       delaiDepasse ? "" : erreur,
     );
-    return {
-      statut: "erreur",
-      message: `Votre message n'a pas pu être envoyé. Merci de réessayer dans quelques instants, ou de nous appeler au ${site.telephone}.`,
-      erreurs: {},
-      valeurs,
-    };
+    return { ok: false };
   }
+}
 
-  return {
-    statut: "succes",
-    message: "Merci, votre message a bien été envoyé. Nous vous répondons très vite.",
-    erreurs: {},
-    valeurs: champsVides,
-  };
+/**
+ * Avec l'expéditeur de test onboarding@resend.dev, Resend refuse d'écrire à une autre adresse
+ * que celle du compte (= CONTACT_EMAIL_DESTINATION). On n'essaie donc la confirmation que
+ * si elle a une chance d'aboutir : domaine vérifié, ou prospect = adresse du compte (test).
+ */
+function confirmationPossible(expediteur: string, emailProspect: string, adresseCompte: string) {
+  const modeTest = /@resend\.dev>?$/i.test(expediteur.trim());
+  if (!modeTest) return true;
+  return emailProspect.trim().toLowerCase() === adresseCompte.trim().toLowerCase();
 }
