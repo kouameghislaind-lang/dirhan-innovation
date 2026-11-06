@@ -3,7 +3,12 @@
 // Ce fichier tourne UNIQUEMENT sur le serveur, jamais dans le navigateur.
 // Les visiteurs ne peuvent donc pas voir la clé secrète qui sert à envoyer les e-mails.
 
-import { services } from "@/lib/site";
+import { headers } from "next/headers";
+import { autoriserEnvoi, identifierVisiteur } from "@/lib/limiteEnvois";
+import { services, site } from "@/lib/site";
+
+// Délai maximal accordé à Resend pour répondre (en millisecondes)
+const DELAI_RESEND = 10_000;
 
 export type ChampsContact = {
   nom: string;
@@ -81,6 +86,17 @@ export async function envoyerMessage(
     return { statut: "erreur", message: "Merci de corriger les champs indiqués.", erreurs, valeurs };
   }
 
+  // 3 bis. Limite d'envois : pas plus de 5 messages par heure et par visiteur (voir lib/limiteEnvois.ts)
+  if (!autoriserEnvoi(identifierVisiteur(await headers()))) {
+    console.warn("[Formulaire de contact] Limite d'envois atteinte.");
+    return {
+      statut: "erreur",
+      message: `Vous avez envoyé plusieurs messages récemment. Merci de réessayer un peu plus tard, ou de nous appeler au ${site.telephone}.`,
+      erreurs: {},
+      valeurs,
+    };
+  }
+
   // 4. Envoi de l'e-mail via le service Resend (https://resend.com)
   const cleApi = process.env.RESEND_API_KEY;
   const destinataire = process.env.CONTACT_EMAIL_DESTINATION;
@@ -127,6 +143,8 @@ export async function envoyerMessage(
   try {
     const reponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
+      // Au-delà de 10 secondes sans réponse, on abandonne et on prévient le visiteur
+      signal: AbortSignal.timeout(DELAI_RESEND),
       headers: {
         Authorization: `Bearer ${cleApi}`,
         "Content-Type": "application/json",
@@ -145,10 +163,16 @@ export async function envoyerMessage(
       throw new Error("Envoi refusé");
     }
   } catch (erreur) {
-    console.error("[Formulaire de contact] Échec de l'envoi :", erreur);
+    const delaiDepasse = erreur instanceof Error && erreur.name === "TimeoutError";
+    console.error(
+      delaiDepasse
+        ? `[Formulaire de contact] Resend n'a pas répondu en ${DELAI_RESEND / 1000} s.`
+        : "[Formulaire de contact] Échec de l'envoi :",
+      delaiDepasse ? "" : erreur,
+    );
     return {
       statut: "erreur",
-      message: "Votre message n'a pas pu être envoyé. Merci de réessayer dans quelques instants.",
+      message: `Votre message n'a pas pu être envoyé. Merci de réessayer dans quelques instants, ou de nous appeler au ${site.telephone}.`,
       erreurs: {},
       valeurs,
     };
