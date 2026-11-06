@@ -3,11 +3,11 @@ import { metaPage } from "@/lib/seo";
 import Apparition from "@/components/Apparition";
 import FormulaireContact from "@/components/FormulaireContact";
 import Bouton from "@/components/ui/Bouton";
-import { reassurance, site } from "@/lib/site";
+import { liensContact, reassurance, site } from "@/lib/site";
 
 export const metadata: Metadata = metaPage(
   "Contact",
-  "Parlez-nous de votre projet digital : site web, application mobile, logiciel, branding, marketing ou IA. Agence basée à Abidjan.",
+  "Parlez-nous de votre projet digital : site web, application mobile, logiciel, branding, marketing ou IA. Agence basée à Cocody, Abidjan.",
   "/contact",
 );
 
@@ -75,18 +75,31 @@ export default function PageContact() {
                 <div>
                   <dt className="surtitre">Téléphone</dt>
                   <dd className="mt-1">
-                    <a href={`tel:${site.telephone.replace(/\s/g, "")}`} className="text-blanc/90 transition-colors hover:text-or">
+                    <a href={liensContact.telephone} className="text-blanc/90 transition-colors hover:text-or">
                       {site.telephone}
                     </a>
                   </dd>
                 </div>
               )}
+              <div>
+                <dt className="surtitre">Facebook</dt>
+                <dd className="mt-1">
+                  <a
+                    href={site.facebook.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blanc/90 transition-colors hover:text-or"
+                  >
+                    Page officielle DIRHAN INNOVATION ↗
+                  </a>
+                </dd>
+              </div>
             </dl>
 
             {/* WhatsApp : affiché uniquement si le numéro est renseigné dans lib/site.ts */}
             {site.whatsapp && (
               <Bouton
-                href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Bonjour DIRHAN INNOVATION, je souhaite parler de mon projet.")}`}
+                href={liensContact.whatsapp("Bonjour DIRHAN INNOVATION, je souhaite parler de mon projet.")}
                 externe
                 variante="secondaire"
                 fleche="externe"

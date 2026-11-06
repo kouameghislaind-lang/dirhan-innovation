@@ -23,14 +23,38 @@ export const site = {
   signature: "L'excellence digitale, née en Côte d'Ivoire.",
   description:
     "Agence digitale et technologique ivoirienne aux standards internationaux : sites web, applications mobiles, logiciels, branding, marketing digital et intelligence artificielle.",
-  ville: "Abidjan, Côte d'Ivoire",
   url: adresseDuSite(),
-  // À compléter quand tu me donneras tes coordonnées officielles :
-  email: "",
-  telephone: "",
-  // Numéro WhatsApp au format international, sans espace ni "+" (ex. : 2250700000000).
-  // Tant qu'il est vide, aucun bouton WhatsApp n'est affiché.
-  whatsapp: "",
+
+  // ===== Coordonnées officielles (NAP : nom, adresse, téléphone) =====
+  // Ces valeurs sont la SEULE source : pages, pied de page, menu, SEO et Schema.org les réutilisent.
+  // Pas d'adresse de rue ni de coordonnées GPS tant qu'elles ne sont pas confirmées.
+  adresse: {
+    quartier: "Cocody",
+    ville: "Abidjan",
+    pays: "Côte d'Ivoire",
+    codePays: "CI",
+  },
+  ville: "Cocody, Abidjan, Côte d'Ivoire", // adresse complète affichée
+  localisationCourte: "Cocody, Abidjan", // version courte (badge de l'accueil)
+  telephone: "+225 01 41 95 95 97", // format affiché
+  // Numéro WhatsApp : même numéro, format international sans espace ni "+"
+  whatsapp: "2250141959597",
+  email: "", // à compléter
+  facebook: {
+    pageId: "218946911938291",
+    // Adresse canonique de la page (vérifiée : facebook.com/218946911938291 redirige ici)
+    url: "https://www.facebook.com/dirhaninnovation/",
+  },
+};
+
+// Liens prêts à l'emploi, fabriqués à partir des coordonnées ci-dessus
+export const liensContact = {
+  // tel:+2250141959597 (sans espaces, pour lancer l'appel sur mobile)
+  telephone: `tel:${site.telephone.replace(/\s/g, "")}`,
+  // Numéro au format international strict (E.164), utilisé par Schema.org
+  telephoneE164: site.telephone.replace(/\s/g, ""),
+  whatsapp: (message?: string) =>
+    `https://wa.me/${site.whatsapp}${message ? `?text=${encodeURIComponent(message)}` : ""}`,
 };
 
 // L'action principale du site : un seul libellé partout, pour ne pas faire hésiter le visiteur

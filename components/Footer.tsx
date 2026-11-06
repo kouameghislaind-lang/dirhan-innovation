@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import Bouton from "@/components/ui/Bouton";
-import { actionPrincipale, liensLegaux, navigation, services, site } from "@/lib/site";
+import { actionPrincipale, liensContact, liensLegaux, navigation, services, site } from "@/lib/site";
 
 // Pied de page « signature » : appel à l'action, plan du site, contact et grande signature DIRHAN.
 export default function Footer() {
@@ -55,7 +55,9 @@ export default function Footer() {
           <div className="lg:col-span-3">
             <h2 className="surtitre">Contact</h2>
             <ul className="mt-4 space-y-2">
-              <li className="py-1 text-sm text-gris">{site.ville}</li>
+              <li className="text-sm leading-6 text-gris">
+                <address className="not-italic">{site.ville}</address>
+              </li>
               {site.email && (
                 <li>
                   <a href={`mailto:${site.email}`} className={lien}>
@@ -65,18 +67,23 @@ export default function Footer() {
               )}
               {site.telephone && (
                 <li>
-                  <a href={`tel:${site.telephone.replace(/\s/g, "")}`} className={lien}>
+                  <a href={liensContact.telephone} className={lien}>
                     {site.telephone}
                   </a>
                 </li>
               )}
               {site.whatsapp && (
                 <li>
-                  <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer" className={lien}>
+                  <a href={liensContact.whatsapp()} target="_blank" rel="noopener noreferrer" className={lien}>
                     WhatsApp ↗
                   </a>
                 </li>
               )}
+              <li>
+                <a href={site.facebook.url} target="_blank" rel="noopener noreferrer" className={lien}>
+                  Facebook ↗
+                </a>
+              </li>
               <li>
                 <Link href="/contact" className={lien}>
                   Formulaire de contact →

@@ -6,7 +6,7 @@ import { entreprise, site } from "@/lib/site";
 
 export const metadata: Metadata = metaPage(
   "Mentions légales",
-  "Mentions légales du site de DIRHAN INNOVATION, agence digitale et technologique basée à Abidjan, Côte d'Ivoire.",
+  "Mentions légales du site de DIRHAN INNOVATION, agence digitale et technologique basée à Cocody, Abidjan, Côte d'Ivoire.",
   "/mentions-legales",
 );
 

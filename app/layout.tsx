@@ -4,7 +4,7 @@ import Animations from "@/components/Animations";
 import EffetsInteractifs from "@/components/EffetsInteractifs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { estSitePublic, services, site } from "@/lib/site";
+import { estSitePublic, liensContact, services, site } from "@/lib/site";
 import "./globals.css";
 
 // Police élégante pour les titres
@@ -30,6 +30,7 @@ export const metadata: Metadata = {
   applicationName: site.nom,
   keywords: [
     "agence digitale Abidjan",
+    "agence digitale Cocody",
     "création site web Côte d'Ivoire",
     "application mobile Abidjan",
     "développement logiciel",
@@ -67,15 +68,26 @@ const donneesStructurees = {
   url: site.url,
   logo: `${site.url}/icon.png`,
   image: `${site.url}/opengraph-image.png`,
+  // Adresse : commune (Cocody) et district (Abidjan) uniquement, sans rue ni GPS non confirmés
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Abidjan",
-    addressCountry: "CI",
+    addressLocality: site.adresse.quartier,
+    addressRegion: site.adresse.ville,
+    addressCountry: site.adresse.codePays,
   },
   areaServed: ["Côte d'Ivoire", "Afrique"],
   knowsAbout: services.map((s) => s.titre),
+  telephone: liensContact.telephoneE164,
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: liensContact.telephoneE164,
+    contactType: "customer service",
+    areaServed: "CI",
+    availableLanguage: ["French"],
+  },
+  // Profils officiels de l'entreprise (relie la page Facebook au site pour Google)
+  sameAs: [site.facebook.url],
   ...(site.email ? { email: site.email } : {}),
-  ...(site.telephone ? { telephone: site.telephone } : {}),
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

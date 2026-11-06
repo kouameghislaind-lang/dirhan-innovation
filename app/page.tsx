@@ -46,7 +46,7 @@ export default function Accueil() {
             <Apparition immediat>
               <p className="inline-flex items-center gap-3 rounded-full border border-ligne bg-noir/60 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.3em] text-or backdrop-blur-sm">
                 <span className="h-1.5 w-1.5 rounded-full bg-or" />
-                Agence digitale · {site.ville}
+                Agence digitale · {site.localisationCourte}
               </p>
             </Apparition>
 
