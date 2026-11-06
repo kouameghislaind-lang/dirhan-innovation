@@ -11,6 +11,40 @@ import { services, site } from "@/lib/site";
 // Délai maximal accordé à Resend pour répondre (en millisecondes)
 const DELAI_RESEND = 10_000;
 
+// ===== DIAGNOSTIC TEMPORAIRE =====
+// Passe à false (ou supprime ce bloc) une fois l'envoi d'e-mails réparé.
+const DIAGNOSTIC_ACTIF = true;
+
+// Décrit la configuration SANS révéler aucune valeur : uniquement des oui/non,
+// le domaine de l'expéditeur (non secret) et l'environnement Vercel.
+function journaliserConfiguration(cle?: string, destinataire?: string, expediteur?: string) {
+  const formatEmail = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]{2,}$/;
+  const adresseExpediteur = expediteur?.match(/<([^>]+)>/)?.[1] ?? expediteur ?? "";
+  console.info(
+    "[Formulaire de contact][diagnostic]",
+    JSON.stringify({
+      environnementVercel: process.env.VERCEL_ENV ?? "(hors Vercel)",
+      versionDuCode: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "(inconnue)",
+      RESEND_API_KEY: {
+        presente: cle !== undefined,
+        nonVide: Boolean(cle && cle.trim()),
+        commenceParRe_: Boolean(cle?.trim().startsWith("re_")),
+        espacesEnTrop: Boolean(cle && cle !== cle.trim()),
+      },
+      CONTACT_EMAIL_DESTINATION: {
+        presente: destinataire !== undefined,
+        nonVide: Boolean(destinataire && destinataire.trim()),
+        formatEmailValide: formatEmail.test(destinataire?.trim() ?? ""),
+        espacesEnTrop: Boolean(destinataire && destinataire !== destinataire.trim()),
+      },
+      expediteur: {
+        personnalise: Boolean(process.env.CONTACT_EMAIL_EXPEDITEUR),
+        domaine: adresseExpediteur.split("@")[1] ?? "(invalide)",
+      },
+    }),
+  );
+}
+
 export type ChampsContact = {
   nom: string;
   email: string;
@@ -115,6 +149,10 @@ async function traiterMessage(
   const destinataire = process.env.CONTACT_EMAIL_DESTINATION;
   const expediteur = process.env.CONTACT_EMAIL_EXPEDITEUR ||"Site DIRHAN <onboarding@resend.dev>";
 
+  // DIAGNOSTIC TEMPORAIRE (à retirer une fois le problème résolu) :
+  // décrit la configuration dans les journaux Vercel SANS jamais afficher les valeurs secrètes.
+  if (DIAGNOSTIC_ACTIF) journaliserConfiguration(cleApi, destinataire, expediteur);
+
   if (!cleApi || !destinataire) {
     if (process.env.NODE_ENV === "development") {
       // Mode test : pas encore de clé configurée, on affiche le message dans le terminal.
@@ -126,7 +164,8 @@ async function traiterMessage(
         valeurs: champsVides,
       };
     }
-    console.error("[Formulaire de contact] RESEND_API_KEY ou CONTACT_EMAIL_DESTINATION manquant.");
+    const manquantes = [!cleApi && "RESEND_API_KEY", !destinataire && "CONTACT_EMAIL_DESTINATION"].filter(Boolean);
+    console.error(`[Formulaire de contact] Variable(s) manquante(s) ou vide(s) : ${manquantes.join(", ")}.`);
     return {
       statut: "erreur",
       message: "L'envoi est momentanément indisponible. Merci de réessayer plus tard.",
@@ -169,7 +208,9 @@ async function traiterMessage(
     `Nouveau projet : ${valeurs.nom}${valeurs.service ? ` (${valeurs.service})` : ""}`,
   ).slice(0, 150);
 
+  const debutEnvoi = Date.now();
   try {
+    if (DIAGNOSTIC_ACTIF) console.info("[Formulaire de contact][diagnostic] Appel de Resend…");
     const reponse = await fetch("https://api.resend.com/emails", {
       method: "POST",
       // Au-delà de 10 secondes sans réponse, on abandonne et on prévient le visiteur
@@ -188,15 +229,37 @@ async function traiterMessage(
       }),
     });
 
+    if (DIAGNOSTIC_ACTIF) {
+      console.info(
+        `[Formulaire de contact][diagnostic] Réponse de Resend reçue : code HTTP ${reponse.status} en ${Date.now() - debutEnvoi} ms`,
+      );
+    }
+
     if (!reponse.ok) {
-      console.error("[Formulaire de contact] Erreur Resend :", reponse.status, await reponse.text());
+      // La réponse d'erreur de Resend ne contient jamais la clé : on peut la journaliser
+      const corps = await reponse.text();
+      let detail: { name?: string; message?: string } = {};
+      try {
+        detail = JSON.parse(corps);
+      } catch {
+        detail = { message: corps.slice(0, 300) };
+      }
+      console.error(
+        "[Formulaire de contact] Erreur Resend :",
+        JSON.stringify({ codeHttp: reponse.status, type: detail.name, message: detail.message }),
+      );
       throw new Error("Envoi refusé");
+    }
+
+    if (DIAGNOSTIC_ACTIF) {
+      const { id } = (await reponse.json().catch(() => ({}))) as { id?: string };
+      console.info("[Formulaire de contact][diagnostic] E-mail accepté par Resend, identifiant :", id ?? "(inconnu)");
     }
   } catch (erreur) {
     const delaiDepasse = erreur instanceof Error && erreur.name === "TimeoutError";
     console.error(
       delaiDepasse
-        ? `[Formulaire de contact] Resend n'a pas répondu en ${DELAI_RESEND / 1000} s.`
+        ? `[Formulaire de contact] Resend n'a pas répondu en ${DELAI_RESEND / 1000} s (arrêt après ${Date.now() - debutEnvoi} ms).`
         : "[Formulaire de contact] Échec de l'envoi :",
       delaiDepasse ? "" : erreur,
     );
