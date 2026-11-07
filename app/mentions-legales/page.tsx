@@ -91,7 +91,7 @@ export default function MentionsLegales() {
       <Article numero={6} titre="Données personnelles">
         <p>
           Les informations collectées via le formulaire de contact sont traitées conformément à
-          notre <Link href="/confidentialite">politique de confidentialité</Link>. L&apos;usage des
+          notre <Link href="/politique-de-confidentialite">politique de confidentialité</Link>. L&apos;usage des
           cookies est décrit dans la page <Link href="/cookies">gestion des cookies</Link>, et les
           règles d&apos;utilisation du site dans nos{" "}
           <Link href="/conditions-utilisation">conditions générales d&apos;utilisation</Link>.

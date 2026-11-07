@@ -55,7 +55,7 @@ export default function GestionCookies() {
           Le <Link href="/contact">formulaire de contact</Link> n&apos;utilise pas de cookie. Les
           informations que vous y saisissez sont envoyées uniquement lorsque vous cliquez sur «
           Envoyer le message », et sont traitées comme décrit dans notre{" "}
-          <Link href="/confidentialite">politique de confidentialité</Link>.
+          <Link href="/politique-de-confidentialite">politique de confidentialité</Link>.
         </p>
       </Article>
 

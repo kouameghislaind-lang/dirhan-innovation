@@ -159,7 +159,7 @@ export const entreprise = {
 
 export const liensLegaux = [
   { label: "Mentions légales", href: "/mentions-legales" },
-  { label: "Politique de confidentialité", href: "/confidentialite" },
+  { label: "Politique de confidentialité", href: "/politique-de-confidentialite" },
   { label: "Gestion des cookies", href: "/cookies" },
   { label: "Conditions d'utilisation", href: "/conditions-utilisation" },
 ];

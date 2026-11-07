@@ -103,7 +103,7 @@ export default function ConditionsUtilisation() {
       <Article numero={8} titre="Données personnelles et cookies">
         <p>
           Le traitement de vos données est décrit dans notre{" "}
-          <Link href="/confidentialite">politique de confidentialité</Link>, et l&apos;usage des
+          <Link href="/politique-de-confidentialite">politique de confidentialité</Link>, et l&apos;usage des
           cookies dans notre page <Link href="/cookies">gestion des cookies</Link>.
         </p>
       </Article>

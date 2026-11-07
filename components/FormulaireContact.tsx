@@ -168,7 +168,7 @@ export default function FormulaireContact() {
           vous acceptez que vos informations soient utilisées uniquement pour vous répondre (voir
           notre{" "}
           <Link
-            href="/confidentialite"
+            href="/politique-de-confidentialite"
             className="text-or underline decoration-or/40 underline-offset-2 hover:text-or-clair"
           >
             politique de confidentialité

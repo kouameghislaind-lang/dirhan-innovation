@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
   headers() {
     return [{ source: "/:path*", headers: enTetesSecurite }];
   },
+  // L'ancienne adresse de la politique de confidentialité redirige vers la nouvelle
+  // (redirection permanente 308 : les anciens liens et Google suivent automatiquement)
+  redirects() {
+    return [{ source: "/confidentialite", destination: "/politique-de-confidentialite", permanent: true }];
+  },
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

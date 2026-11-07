@@ -218,6 +218,11 @@ body::after {
   }
 }
 
+/* Ancres des pages légales : le titre visé n'est pas caché sous le menu fixe */
+[id^="article-"] {
+  scroll-margin-top: 7rem;
+}
+
 /* Paragraphes : coupure des lignes plus harmonieuse */
 p {
   text-wrap: pretty;

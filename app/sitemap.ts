@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { chemin: "/a-propos", priorite: 0.7 },
     { chemin: "/contact", priorite: 0.8 },
     { chemin: "/mentions-legales", priorite: 0.3 },
-    { chemin: "/confidentialite", priorite: 0.3 },
+    { chemin: "/politique-de-confidentialite", priorite: 0.4 },
     { chemin: "/cookies", priorite: 0.3 },
     { chemin: "/conditions-utilisation", priorite: 0.3 },
     ...realisations.map((p) => ({ chemin: `/realisations/${p.slug}`, priorite: 0.6 })),

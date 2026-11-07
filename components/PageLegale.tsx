@@ -9,11 +9,14 @@ export function PageLegale({
   titre,
   intro,
   children,
+  dateMiseAJour,
 }: {
   surtitre: string;
   titre: string;
   intro: ReactNode;
   children: ReactNode;
+  // Date propre à la page ; par défaut, celle des informations légales de l'entreprise
+  dateMiseAJour?: string;
 }) {
   return (
     <section className="pt-36 pb-24 lg:pt-44 lg:pb-32">
@@ -22,7 +25,7 @@ export function PageLegale({
           <p className="surtitre">{surtitre}</p>
           <h1 className="titre-affiche mt-5">{titre}</h1>
           <p className="texte-intro mt-6">{intro}</p>
-          <p className="mt-4 text-sm text-gris">Dernière mise à jour : {entreprise.dateMiseAJour}</p>
+          <p className="mt-4 text-sm text-gris">Dernière mise à jour : {dateMiseAJour || entreprise.dateMiseAJour}</p>
 
           {/* Avertissement : document à faire relire */}
           <div
