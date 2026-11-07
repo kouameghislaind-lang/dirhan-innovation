@@ -11,7 +11,7 @@ const etatInitial: EtatContact = {
   statut: "initial",
   message: "",
   erreurs: {},
-  valeurs: { nom: "", email: "", telephone: "", entreprise: "", service: "", message: "" },
+  valeurs: { nom: "", email: "", telephone: "", sujet: "", entreprise: "", service: "", message: "" },
 };
 
 const styleChamp =
@@ -119,7 +119,22 @@ export default function FormulaireContact() {
         </Champ>
       </div>
 
-      <Champ id="service" label="Service souhaité" erreur={erreurs.service} optionnel>
+      <div className="grid gap-6 sm:grid-cols-2">
+      <Champ id="sujet" label="Sujet" erreur={erreurs.sujet}>
+        <input
+          id="sujet"
+          name="sujet"
+          maxLength={LIMITES_FORMULAIRE.sujet}
+          type="text"
+          required
+          defaultValue={valeurs.sujet}
+          placeholder="Ex. : création de notre site vitrine"
+          className={`${styleChamp} ${bordure("sujet")}`}
+          {...aria("sujet")}
+        />
+      </Champ>
+
+      <Champ id="service" label="Type de projet" erreur={erreurs.service} optionnel>
         <div className="relative">
         <select
           id="service"
@@ -129,7 +144,7 @@ export default function FormulaireContact() {
           className={`${styleChamp} ${bordure("service")} appearance-none pr-12`}
           {...aria("service")}
         >
-          <option value="">Choisissez un service</option>
+          <option value="">Choisissez un type de projet</option>
           {services.map((s) => (
             <option key={s.numero} value={s.titre}>
               {s.titre}
@@ -147,6 +162,7 @@ export default function FormulaireContact() {
         </svg>
         </div>
       </Champ>
+      </div>
 
       <Champ id="message" label="Votre projet" erreur={erreurs.message}>
         <textarea

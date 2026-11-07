@@ -22,7 +22,7 @@ export const site = {
   nom: "DIRHAN INNOVATION",
   signature: "L'excellence digitale, née en Côte d'Ivoire.",
   description:
-    "Agence digitale et technologique ivoirienne aux standards internationaux : sites web, applications mobiles, logiciels, branding, marketing digital et intelligence artificielle.",
+    "Agence digitale et technologique à Abidjan : communication digitale, sites web, applications, création graphique, logiciels et contenus sur mesure.",
   url: adresseDuSite(),
 
   // ===== Coordonnées officielles (NAP : nom, adresse, téléphone) =====
@@ -57,6 +57,14 @@ export const liensContact = {
     `https://wa.me/${site.whatsapp}${message ? `?text=${encodeURIComponent(message)}` : ""}`,
 };
 
+// Messages préremplis lorsqu'un visiteur ouvre WhatsApp depuis le site
+export const messagesWhatsApp = {
+  general: `Bonjour ${site.nom}, je souhaite échanger avec vous au sujet d'un projet.`,
+  devis: `Bonjour ${site.nom}, je souhaite obtenir un devis pour un projet.`,
+  service: (service: string) =>
+    `Bonjour ${site.nom}, je suis intéressé(e) par votre offre « ${service} ». Pouvons-nous en parler ?`,
+};
+
 // L'action principale du site : un seul libellé partout, pour ne pas faire hésiter le visiteur
 export const actionPrincipale = { label: "Demander un devis", href: "/contact" };
 
@@ -75,65 +83,67 @@ export type IconeNom =
   | "qualite";
 
 export const accueil = {
-  titre: "Nous transformons vos idées en solutions digitales innovantes.",
+  // SECTION 1 — Hero
+  titre: "Nous transformons vos idées en expériences digitales innovantes.",
   sousTitre:
-    "Agence digitale et technologique basée à Abidjan, DIRHAN INNOVATION conçoit des sites, des applications, des logiciels et des contenus aux standards internationaux, pour faire grandir votre entreprise.",
-  // Les 5 services mis en avant sur l'accueil. "lien" renvoie vers le détail sur la page Services.
-  services: [
-    {
-      icone: "web" as IconeNom,
-      titre: "Création de sites web",
-      texte: "Sites vitrines, boutiques en ligne et plateformes sur mesure, rapides, élégants et bien référencés.",
-      lien: "/services#sites-web",
-    },
-    {
-      icone: "mobile" as IconeNom,
-      titre: "Applications web et mobiles",
-      texte: "Applications iOS, Android et web, fluides et intuitives, pensées pour vos utilisateurs.",
-      lien: "/services#applications-mobiles",
-    },
-    {
-      icone: "logiciel" as IconeNom,
-      titre: "Développement de logiciels",
-      texte: "Outils métiers et solutions sur mesure qui centralisent vos données et simplifient votre travail.",
-      lien: "/services#logiciels",
-    },
-    {
-      icone: "contenu" as IconeNom,
-      titre: "Création de contenus digitaux",
-      texte: "Visuels, vidéos et contenus pour les réseaux sociaux qui captent l'attention et valorisent votre marque.",
-      lien: "/services#marketing-digital",
-    },
-    {
-      icone: "identite" as IconeNom,
-      titre: "Identité visuelle et communication digitale",
-      texte: "Logo, charte graphique et communication en ligne cohérente pour une image forte et professionnelle.",
-      lien: "/services#branding",
-    },
+    "Communication, création web, applications et solutions numériques sur mesure pour accompagner votre croissance.",
+
+  // SECTION 2 — Introduction
+  introduction: {
+    accroche:
+      "Une agence digitale et technologique née à Abidjan, qui réunit stratégie, design et technologie au service de votre croissance.",
+    paragraphes: [
+      "DIRHAN INNOVATION accompagne les entreprises, institutions et entrepreneurs qui veulent exister avec force dans le monde numérique.",
+      "Communication, sites web, applications, logiciels et contenus : nous concevons des solutions sur mesure, exigeantes dans le détail et pensées pour les usages du marché ivoirien et africain.",
+    ],
+  },
+
+  // SECTION 3 — Nos expertises : générée à partir de la liste des services (lib/services.ts)
+
+  // SECTION 5 — Notre approche
+  approche: [
+    { titre: "Découverte", texte: "Nous écoutons votre activité, vos objectifs et vos contraintes." },
+    { titre: "Stratégie", texte: "Nous définissons la bonne réponse : priorités, planning et budget clairs." },
+    { titre: "Conception", texte: "Nous dessinons l'expérience et l'identité, validées avec vous avant de produire." },
+    { titre: "Développement", texte: "Nous réalisons votre projet et vous montrons l'avancement à chaque étape." },
+    { titre: "Lancement", texte: "Nous mettons en ligne, vérifions chaque détail et formons vos équipes." },
+    { titre: "Accompagnement", texte: "Nous restons à vos côtés pour suivre, maintenir et faire évoluer votre projet." },
   ],
-  piliers: [
-    {
-      icone: "innovation" as IconeNom,
-      titre: "Innovation",
-      texte: "Des technologies modernes et des solutions pensées pour durer, au service de vos ambitions.",
-    },
-    {
-      icone: "creativite" as IconeNom,
-      titre: "Créativité",
-      texte: "Un design soigné et des idées originales pour vous démarquer de la concurrence.",
-    },
-    {
-      icone: "accompagnement" as IconeNom,
-      titre: "Accompagnement",
-      texte: "Un interlocuteur unique, à l'écoute, de la première idée jusqu'au lancement et au-delà.",
-    },
-    {
-      icone: "qualite" as IconeNom,
-      titre: "Qualité",
-      texte: "Un travail exigeant, testé et livré avec le souci du détail, aux standards internationaux.",
-    },
+
+  // SECTION 7 — Pourquoi DIRHAN INNOVATION (engagements réellement proposés)
+  avantages: [
+    { titre: "Un interlocuteur unique", texte: "Une seule équipe, de la première idée au lancement, puis pour faire évoluer votre projet." },
+    { titre: "Du sur-mesure", texte: "Chaque solution est conçue pour votre activité, pas copiée d'un modèle générique." },
+    { titre: "Une proposition claire", texte: "Un devis détaillé, un planning et un budget expliqués simplement, sans surprise." },
+    { titre: "Premier échange sans engagement", texte: "Nous prenons le temps de comprendre votre besoin avant toute proposition." },
+    { titre: "Les usages locaux", texte: "Nous connaissons le marché ivoirien : le mobile, WhatsApp et les paiements locaux." },
+    { titre: "L'exigence internationale", texte: "Des méthodes et des technologies modernes, un soin du détail à chaque étape." },
   ],
 };
+
+// ===== Le dirigeant =====
+// Portraits dans public/equipe/ (photos authentiques, non retouchées par le site) :
+//   - dirigeant-02.jpg : portrait couleur, portrait PRINCIPAL (accueil)
+//   - dirigeant.jpg    : portrait noir et blanc, présentation institutionnelle (À propos)
+// Ne jamais inventer d'informations personnelles (diplômes, parcours, dates…).
+export const dirigeant = {
+  nom: "Didier Ghislain KOUAME",
+  fonction: "Fondateur & Directeur Général – DIRHAN INNOVATION",
+  // Texte de présentation : centré sur son rôle dans l'agence
+  presentation: [
+    "Fondateur et Directeur Général de DIRHAN INNOVATION, Didier Ghislain KOUAME porte une conviction : l'innovation digitale doit être un levier concret de croissance pour les entreprises ivoiriennes et africaines.",
+    "Sous sa direction, l'agence conçoit des solutions numériques sur mesure (sites web, applications, logiciels et communication digitale) pensées pour répondre aux besoins réels de chaque organisation.",
+    "Sa priorité : accompagner chaque client avec écoute, exigence et transparence, de la première réflexion jusqu'au lancement, puis dans l'évolution de ses projets.",
+  ],
+  citation: "", // phrase du dirigeant, entre guillemets sur le site (à fournir)
+};
+
+// ===== Équipe (autres membres) =====
+// Une personne s'affiche dans la section « Notre équipe » de l'accueil UNIQUEMENT
+// quand son nom ET sa photo sont renseignés. Photos dans public/equipe/.
+export const equipe: { nom: string; role: string; photo: string; presentation: string }[] = [
+  { nom: "", role: "Commerciale", photo: "", presentation: "" }, // ex. photo : "/equipe/commerciale.jpg"
+];
 
 // ===== Informations légales =====
 // Utilisées par les pages "Mentions légales" et "Politique de confidentialité".
@@ -146,7 +156,7 @@ export const entreprise = {
   rccm: "", // Numéro au Registre du Commerce et du Crédit Mobilier (ex. : CI-ABJ-...)
   ncc: "", // Numéro de Compte Contribuable (DGI)
   siege: "", // Adresse complète du siège (commune, quartier, rue...)
-  directeurPublication: "", // Nom et fonction du responsable du site
+  directeurPublication: "Didier Ghislain KOUAME, Fondateur & Directeur Général", // Nom et fonction du responsable du site
   hebergeur: {
     nom: "", // ex. : Vercel Inc.
     adresse: "",
@@ -169,120 +179,19 @@ export const navigation = [
   { label: "Services", href: "/services" },
   { label: "Réalisations", href: "/realisations" },
   { label: "À propos", href: "/a-propos" },
+  { label: "Équipe", href: "/equipe" },
   { label: "Contact", href: "/contact" },
 ];
 
-export const services = [
-  {
-    numero: "01",
-    icone: "web" as IconeNom,
-    slug: "sites-web",
-    titre: "Création de sites web",
-    description:
-      "Sites vitrines, e-commerce et plateformes sur mesure, rapides, élégants et pensés pour convertir.",
-    detail:
-      "Votre site est souvent le premier contact avec vos clients. Nous créons des sites rapides, beaux sur tous les écrans et bien référencés sur Google, pour transformer vos visiteurs en clients.",
-    prestations: [
-      "Sites vitrines et sites institutionnels",
-      "Boutiques en ligne (e-commerce)",
-      "Plateformes et portails sur mesure",
-      "Référencement naturel (SEO) intégré",
-      "Hébergement, maintenance et évolutions",
-    ],
-  },
-  {
-    numero: "02",
-    icone: "mobile" as IconeNom,
-    slug: "applications-mobiles",
-    titre: "Applications mobiles",
-    description:
-      "Applications iOS et Android fluides et intuitives, de la conception à la publication sur les stores.",
-    detail:
-      "En Afrique, tout passe par le téléphone. Nous concevons des applications simples à utiliser et performantes, même avec une connexion limitée.",
-    prestations: [
-      "Applications iOS et Android",
-      "Design d'interface (UI/UX)",
-      "Intégration des paiements mobiles",
-      "Publication sur l'App Store et Google Play",
-      "Suivi et mises à jour",
-    ],
-  },
-  {
-    numero: "03",
-    icone: "logiciel" as IconeNom,
-    slug: "logiciels",
-    titre: "Développement de logiciels",
-    description:
-      "Outils métiers, ERP et solutions SaaS robustes, adaptés aux processus de votre entreprise.",
-    detail:
-      "Fini les fichiers Excel éparpillés. Nous développons des outils sur mesure qui centralisent vos données et simplifient le travail de vos équipes.",
-    prestations: [
-      "Logiciels de gestion sur mesure",
-      "ERP, CRM et tableaux de bord",
-      "Plateformes SaaS",
-      "Gestion de flotte, de stock et de facturation",
-      "Connexion à vos outils existants",
-    ],
-  },
-  {
-    numero: "04",
-    icone: "identite" as IconeNom,
-    slug: "branding",
-    titre: "Branding & design graphique",
-    description:
-      "Identités visuelles fortes, logos et chartes graphiques qui donnent du prestige à votre marque.",
-    detail:
-      "Une marque forte inspire confiance. Nous construisons une identité visuelle cohérente et mémorable, du logo jusqu'à vos supports de communication.",
-    prestations: [
-      "Création de logo",
-      "Charte graphique complète",
-      "Supports print et digitaux",
-      "Visuels pour réseaux sociaux",
-      "Présentations et plaquettes commerciales",
-    ],
-  },
-  {
-    numero: "05",
-    icone: "marketing" as IconeNom,
-    slug: "marketing-digital",
-    titre: "Marketing digital",
-    description:
-      "Stratégie, réseaux sociaux, référencement et publicité en ligne pour accélérer votre croissance.",
-    detail:
-      "Être en ligne ne suffit pas : il faut être vu par les bonnes personnes. Nous élaborons et pilotons des stratégies qui génèrent de vrais résultats.",
-    prestations: [
-      "Stratégie digitale",
-      "Gestion des réseaux sociaux",
-      "Publicité Facebook, Instagram, Google et TikTok",
-      "Création de contenus et vidéos",
-      "Analyse des résultats et rapports",
-    ],
-  },
-  {
-    numero: "06",
-    icone: "ia" as IconeNom,
-    slug: "ia-automatisation",
-    titre: "IA & automatisation",
-    description:
-      "Assistants intelligents, chatbots et automatisation des tâches pour gagner en efficacité.",
-    detail:
-      "L'intelligence artificielle n'est plus réservée aux géants. Nous l'intégrons dans votre activité pour gagner du temps et mieux servir vos clients.",
-    prestations: [
-      "Chatbots et assistants WhatsApp",
-      "Automatisation des tâches répétitives",
-      "Génération de contenus par IA",
-      "Analyse intelligente de données",
-      "Formation de vos équipes à l'IA",
-    ],
-  },
-];
+// Les 6 services (contenus complets) sont dans lib/services.ts
+export { services, type Service } from "@/lib/services";
 
 // ===== Page Réalisations =====
 // Pour ajouter un projet, copie un des projets ci-dessous et modifie-le.
 // - categorie : sert aux filtres de la page (une nouvelle catégorie crée un nouveau filtre)
 // - statut : "developpement", "prototype", "concept" ou "livre" (projet terminé et livré)
-// - service : le "slug" du service lié (sites-web, applications-mobiles, logiciels,
-//   branding, marketing-digital, ia-automatisation)
+// - service : le "slug" du service lié (communication-digitale, sites-web, applications-web-mobiles,
+//   creation-graphique, logiciels, creation-de-contenus)
 // - illustration : "boutique", "flotte" ou "restaurant" (dessins originaux du site)
 // - image (facultatif) : une vraie capture dans public/realisations/, elle remplace l'illustration
 // - client : "Projet interne DIRHAN" ou le nom d'un client (uniquement avec son accord)
@@ -294,6 +203,14 @@ export const statuts: Record<StatutProjet, string> = {
   prototype: "Prototype",
   concept: "Concept",
   livre: "Livré",
+};
+
+// Explication de chaque statut (légende de la page Réalisations)
+export const statutsDescription: Record<StatutProjet, string> = {
+  concept: "Idée étudiée et mise en forme, pas encore développée.",
+  prototype: "Première version fonctionnelle, en cours de test.",
+  developpement: "Projet en cours de réalisation.",
+  livre: "Projet terminé et mis en service.",
 };
 
 export type Realisation = {
@@ -369,8 +286,8 @@ export const aPropos = {
     "Faire de la Côte d'Ivoire une référence de l'excellence digitale en Afrique, et prouver que l'innovation de classe mondiale peut naître à Abidjan.",
   histoire: [
     "DIRHAN INNOVATION est née à Abidjan d'une conviction simple : les entreprises africaines méritent des solutions digitales aussi exigeantes que celles des plus grandes agences du monde.",
-    "Trop souvent, il faut choisir entre un prestataire local qui comprend le marché et une agence étrangère qui maîtrise les standards internationaux. Nous avons créé DIRHAN pour réunir les deux.",
-    "Aujourd'hui, nous accompagnons nos clients de l'idée jusqu'au lancement : sites web, applications, logiciels, identité de marque, marketing et intelligence artificielle.",
+    "Trop souvent, il faut choisir entre un prestataire local qui comprend le marché et une agence étrangère qui maîtrise les standards internationaux. Nous avons créé DIRHAN INNOVATION pour réunir les deux.",
+    "Aujourd'hui, nous accompagnons nos clients de l'idée jusqu'au lancement : communication digitale, sites web, applications, création graphique, logiciels et contenus.",
   ],
 };
 
@@ -380,15 +297,6 @@ export const manifeste = {
     "Nous croyons que l'excellence n'a pas de frontières. Qu'une idée née à Abidjan peut rivaliser avec les meilleures du monde. Et que chaque entreprise africaine mérite des outils digitaux à la hauteur de ses ambitions.",
   // Mots du manifeste mis en valeur en or
   motsCles: ["excellence", "Abidjan", "ambitions"],
-};
-
-// Fondateur : la section s'affiche automatiquement sur la page À propos dès que "nom" est rempli.
-// Photo : place le fichier dans public/ (ex. public/fondateur.jpg) et écris "/fondateur.jpg".
-export const fondateur = {
-  nom: "",
-  role: "", // ex. : Fondateur & directeur général
-  photo: "",
-  citation: "",
 };
 
 export const valeurs = [
@@ -410,7 +318,7 @@ export const valeurs = [
   },
 ];
 
-// Points de réassurance affichés sur la page Contact (à adapter à tes engagements réels)
+// Points de réassurance affichés sur les pages Contact et À propos (à adapter à tes engagements réels)
 export const reassurance = [
   { titre: "Premier échange sans engagement", texte: "Nous prenons le temps de comprendre votre besoin avant toute proposition." },
   { titre: "Une proposition claire", texte: "Un devis détaillé, un planning et un budget expliqués simplement." },

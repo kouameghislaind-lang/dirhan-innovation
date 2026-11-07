@@ -1,3 +1,4 @@
+import FilAriane from "@/components/FilAriane";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +8,8 @@ import BadgeStatut from "@/components/BadgeStatut";
 import AppelAction from "@/components/ui/AppelAction";
 import IllustrationProjet from "@/components/IllustrationProjet";
 import { metaPage } from "@/lib/seo";
-import { realisations, services } from "@/lib/site";
+import Bouton from "@/components/ui/Bouton";
+import { liensContact, realisations, services } from "@/lib/site";
 
 // Une page par projet, créée automatiquement à partir de la liste dans lib/site.ts
 export function generateStaticParams() {
@@ -22,7 +24,12 @@ export async function generateMetadata({ params }: PageProps<"/realisations/[slu
   const { slug } = await params;
   const projet = trouverProjet(slug);
   if (!projet) return { title: "Projet introuvable", robots: { index: false } };
-  return metaPage(projet.titre, projet.resume, `/realisations/${projet.slug}`);
+  // Description complétée si le résumé est trop court pour Google
+  const description =
+    projet.resume.length < 110
+      ? `${projet.resume} Projet interne de DIRHAN INNOVATION (${projet.statutDetail.toLowerCase()}).`
+      : projet.resume;
+  return metaPage(projet.titre, description, `/realisations/${projet.slug}`);
 }
 
 export default async function PageProjet({ params }: PageProps<"/realisations/[slug]">) {
@@ -43,11 +50,7 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
         />
         <div className="relative mx-auto max-w-7xl px-6">
           <Apparition immediat>
-            <nav aria-label="Fil d'Ariane" className="text-sm text-gris">
-              <Link href="/realisations" className="inline-block py-2 transition-colors hover:text-blanc">
-                ← Toutes les réalisations
-              </Link>
-            </nav>
+            <FilAriane etapes={[{ label: "Réalisations", href: "/realisations" }, { label: projet.titre }]} />
           </Apparition>
 
           <div className="mt-10 grid items-center gap-12 lg:grid-cols-2">
@@ -75,7 +78,7 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
                     <dt className="text-xs uppercase tracking-[0.25em] text-or">Expertise</dt>
                     <dd className="mt-2">
                       <Link
-                        href={`/services#${service.slug}`}
+                        href={`/services/${service.slug}`}
                         className="-my-1 inline-block py-1 text-blanc/90 underline decoration-or/40 underline-offset-4 transition-colors hover:text-or"
                       >
                         {service.titre}
@@ -123,12 +126,12 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
           <Apparition>
             <h2 className="titre-section">Les axes du projet</h2>
           </Apparition>
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-10 grid gap-px overflow-hidden rounded-[var(--radius-carte)] border border-ligne bg-ligne sm:grid-cols-2 lg:grid-cols-4">
             {projet.axes.map((axe, i) => (
-              <li key={axe}>
-                <Apparition delai={i * 0.08} className="carte h-full p-6">
-                  <span className="font-titre text-sm text-blanc/35">0{i + 1}</span>
-                  <p className="titre-carte mt-3">{axe}</p>
+              <li key={axe} className="bg-noir-clair p-6 sm:p-8">
+                <Apparition delai={i * 0.08}>
+                  <span className="font-titre text-3xl text-or/30">{String(i + 1).padStart(2, "0")}</span>
+                  <p className="titre-carte mt-4">{axe}</p>
                 </Apparition>
               </li>
             ))}
@@ -137,6 +140,23 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
             Ce projet est une initiative interne de DIRHAN INNOVATION ({projet.statutDetail.toLowerCase()}).
             Sa présentation sera enrichie au fil de son avancement.
           </p>
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+            {projet.lien && (
+              <Bouton href={projet.lien} externe variante="accent" taille="compact" fleche="externe">
+                Voir le projet en ligne
+              </Bouton>
+            )}
+            {service && (
+              // Lien simple (et non Bouton) : le texte, long, doit pouvoir revenir à la ligne sur mobile
+              <Link
+                href={`/services/${service.slug}`}
+                className="group inline-flex max-w-full items-baseline gap-2 font-semibold text-or transition-colors hover:text-or-clair"
+              >
+                <span className="lien-anime">Découvrir le service : {service.titre}</span>
+                <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+              </Link>
+            )}
+          </div>
         </div>
       </section>
 
@@ -177,6 +197,12 @@ export default async function PageProjet({ params }: PageProps<"/realisations/[s
             Un projet similaire ? <span className="texte-or italic">Parlons-en.</span>
           </>
         }
+        bouton={{ label: "Parlons de votre projet", href: "/contact" }}
+        secondaire={{
+          label: "Écrire sur WhatsApp",
+          href: liensContact.whatsapp(`Bonjour DIRHAN INNOVATION, j'ai découvert le projet ${projet.titre} et j'aimerais échanger sur un projet similaire.`),
+          externe: true,
+        }}
       />
     </>
   );

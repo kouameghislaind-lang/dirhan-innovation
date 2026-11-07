@@ -52,6 +52,7 @@ export type ChampsContact = {
   nom: string;
   email: string;
   telephone: string;
+  sujet: string;
   entreprise: string;
   service: string;
   message: string;
@@ -71,6 +72,7 @@ const champsVides: ChampsContact = {
   nom: "",
   email: "",
   telephone: "",
+  sujet: "",
   entreprise: "",
   service: "",
   message: "",
@@ -105,6 +107,7 @@ async function traiterMessage(
     nom: lire(formData, "nom", LIMITES_FORMULAIRE.nom),
     email: lire(formData, "email", LIMITES_FORMULAIRE.email),
     telephone: lire(formData, "telephone", LIMITES_FORMULAIRE.telephone),
+    sujet: lire(formData, "sujet", LIMITES_FORMULAIRE.sujet),
     entreprise: lire(formData, "entreprise", LIMITES_FORMULAIRE.entreprise),
     service: lire(formData, "service", LIMITES_FORMULAIRE.service),
     message: lire(formData, "message", LIMITES_FORMULAIRE.message),
@@ -117,8 +120,9 @@ async function traiterMessage(
     erreurs.email = "Indiquez une adresse e-mail valide.";
   if (valeurs.telephone && !/^[+\d][\d\s().-]{6,}$/.test(valeurs.telephone))
     erreurs.telephone = "Ce numéro ne semble pas valide.";
+  if (valeurs.sujet.length < 3) erreurs.sujet = "Indiquez le sujet de votre demande.";
   if (valeurs.service && !services.some((s) => s.titre === valeurs.service) && valeurs.service !== "Autre")
-    erreurs.service = "Choisissez un service dans la liste.";
+    erreurs.service = "Choisissez un type de projet dans la liste.";
   if (valeurs.message.length < 10)
     erreurs.message = "Décrivez votre projet en quelques mots (10 caractères minimum).";
 

@@ -1,7 +1,16 @@
 import Link from "next/link";
+import { IconeWhatsApp } from "@/components/BoutonWhatsApp";
 import Logo from "@/components/Logo";
 import Bouton from "@/components/ui/Bouton";
-import { actionPrincipale, liensContact, liensLegaux, navigation, services, site } from "@/lib/site";
+import {
+  actionPrincipale,
+  liensContact,
+  liensLegaux,
+  messagesWhatsApp,
+  navigation,
+  services,
+  site,
+} from "@/lib/site";
 
 // Pied de page « signature » : appel à l'action, plan du site, contact et grande signature DIRHAN.
 export default function Footer() {
@@ -20,10 +29,38 @@ export default function Footer() {
         <div className="grid gap-12 pb-10 pt-16 sm:grid-cols-2 lg:grid-cols-12 lg:pt-20">
           <div className="sm:col-span-2 lg:col-span-4">
             <Logo taille="grand" />
-            <p className="mt-6 max-w-sm font-titre text-xl italic text-blanc/90">{site.signature}</p>
-            <Bouton href={actionPrincipale.href} variante="lien" fleche="droite" className="mt-6">
-              {actionPrincipale.label}
-            </Bouton>
+            <p className="mt-6 max-w-sm font-titre text-xl italic text-champagne">{site.signature}</p>
+            <p className="mt-4 max-w-sm text-sm leading-6 text-gris">
+              Agence digitale et technologique à Abidjan : communication, sites web, applications et
+              logiciels sur mesure.
+            </p>
+            <div className="mt-7 flex flex-wrap items-center gap-3">
+              <Bouton href={actionPrincipale.href} taille="compact" fleche="droite">
+                {actionPrincipale.label}
+              </Bouton>
+              {site.whatsapp && (
+                <a
+                  href={liensContact.whatsapp(messagesWhatsApp.general)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp (nouvel onglet)"
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-ligne-forte text-blanc/80 transition-colors hover:border-or hover:text-or"
+                >
+                  <IconeWhatsApp className="h-4.5 w-4.5" />
+                </a>
+              )}
+              <a
+                href={site.facebook.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook (nouvel onglet)"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-ligne-forte text-blanc/80 transition-colors hover:border-or hover:text-or"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden fill="currentColor" className="h-4.5 w-4.5">
+                  <path d="M13.5 21v-7.5h2.53l.38-2.94H13.5V8.69c0-.85.24-1.43 1.46-1.43h1.56V4.63a20.9 20.9 0 0 0-2.27-.12c-2.25 0-3.79 1.37-3.79 3.9v2.15H7.92v2.94h2.54V21h3.04Z" />
+                </svg>
+              </a>
+            </div>
           </div>
 
           <div className="lg:col-span-2">
@@ -44,7 +81,7 @@ export default function Footer() {
             <ul className="mt-4 space-y-2">
               {services.map((s) => (
                 <li key={s.numero}>
-                  <Link href={`/services#${s.slug}`} className={lien}>
+                  <Link href={`/services/${s.slug}`} className={lien}>
                     {s.titre}
                   </Link>
                 </li>
@@ -103,7 +140,7 @@ export default function Footer() {
 
       {/* Barre légale */}
       <div className="relative border-t border-ligne bg-noir-clair">
-        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-6 text-xs text-gris xl:flex-row xl:items-center xl:justify-between">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 pt-6 pb-24 text-xs text-gris sm:pb-6 xl:flex-row xl:items-center xl:justify-between">
           <p>© 2026 {site.nom}. Tous droits réservés.</p>
           <nav aria-label="Informations légales">
             <ul className="flex flex-wrap gap-x-6 gap-y-1">

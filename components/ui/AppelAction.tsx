@@ -10,7 +10,8 @@ type Props = {
   texte?: string;
   bouton?: { label: string; href: string };
   // Bouton secondaire facultatif, à côté du bouton principal
-  secondaire?: { label: string; href: string };
+  // externe : lien vers un autre site (ex. WhatsApp), ouvert dans un nouvel onglet
+  secondaire?: { label: string; href: string; externe?: boolean };
 };
 
 export default function AppelAction({
@@ -39,7 +40,12 @@ export default function AppelAction({
                 {bouton.label}
               </Bouton>
               {secondaire && (
-                <Bouton href={secondaire.href} variante="secondaire">
+                <Bouton
+                  href={secondaire.href}
+                  variante="secondaire"
+                  externe={secondaire.externe}
+                  fleche={secondaire.externe ? "externe" : undefined}
+                >
                   {secondaire.label}
                 </Bouton>
               )}

@@ -72,8 +72,8 @@ export const sectionsPolitique: SectionPolitique[] = [
       {
         type: "liste",
         elements: [
-          "obligatoires : votre nom complet, votre adresse e-mail et la description de votre projet ;",
-          "facultatives : votre numéro de téléphone ou WhatsApp, le nom de votre entreprise et le service qui vous intéresse.",
+          "obligatoires : votre nom complet, votre adresse e-mail, le sujet de votre demande et la description de votre projet ;",
+          "facultatives : votre numéro de téléphone ou WhatsApp, le nom de votre entreprise et le type de projet qui vous intéresse.",
         ],
       },
       {

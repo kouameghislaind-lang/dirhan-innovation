@@ -21,6 +21,7 @@ export type DemandeDevis = {
   nom: string;
   email: string;
   telephone: string;
+  sujet: string;
   entreprise: string;
   service: string;
   message: string;
@@ -28,7 +29,7 @@ export type DemandeDevis = {
 
 /** Objet de l'e-mail, toujours sur une seule ligne et limité à 150 caractères. */
 export function objetDemande(d: DemandeDevis) {
-  return surUneLigne(`Nouvelle demande de devis : ${d.nom}${d.service ? ` (${d.service})` : ""}`).slice(0, 150);
+  return surUneLigne(`Nouvelle demande de devis : ${d.nom}${d.sujet ? ` – ${d.sujet}` : d.service ? ` (${d.service})` : ""}`).slice(0, 150);
 }
 
 // Une ligne « étiquette / valeur » de la fiche prospect
@@ -66,7 +67,8 @@ export function emailDemandeDevis(d: DemandeDevis, recuLe = new Date()) {
     ),
     ligneFiche("Téléphone / WhatsApp", telephoneHtml),
     ligneFiche("Entreprise", d.entreprise ? echapper(d.entreprise) : nonRenseigne),
-    ligneFiche("Service souhaité", d.service ? echapper(d.service) : nonRenseigne, true),
+    ligneFiche("Sujet", d.sujet ? echapper(d.sujet) : nonRenseigne),
+    ligneFiche("Type de projet", d.service ? echapper(d.service) : nonRenseigne, true),
   ].join("");
 
   const contenu = [
@@ -96,7 +98,7 @@ export function emailDemandeDevis(d: DemandeDevis, recuLe = new Date()) {
 
   const html = gabaritEmail({
     titrePage: objet,
-    apercu: `${d.nom} vous contacte${d.service ? ` pour : ${d.service}` : ""}. ${d.message}`,
+    apercu: `${d.nom} vous contacte${d.sujet ? ` : ${d.sujet}` : d.service ? ` pour : ${d.service}` : ""}. ${d.message}`,
     contenu,
     mention: `E-mail automatique envoyé par le formulaire de contact de ${site.url.replace(/^https?:\/\//, "")}`,
   });
@@ -110,7 +112,8 @@ export function emailDemandeDevis(d: DemandeDevis, recuLe = new Date()) {
     `Adresse e-mail     : ${d.email}`,
     `Téléphone/WhatsApp : ${d.telephone || "Non renseigné"}`,
     `Entreprise         : ${d.entreprise || "Non renseignée"}`,
-    `Service souhaité   : ${d.service || "Non précisé"}`,
+    `Sujet              : ${d.sujet || "Non précisé"}`,
+    `Type de projet     : ${d.service || "Non précisé"}`,
     "",
     "Description du projet :",
     d.message,

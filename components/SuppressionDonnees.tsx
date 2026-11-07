@@ -25,7 +25,7 @@ export default function SuppressionDonnees({ numero }: { numero: number }) {
         <p>
           À ce jour, {site.nom} ne collecte des données personnelles que par le{" "}
           <Link href="/contact">formulaire de contact</Link> : nom, adresse e-mail, téléphone ou
-          WhatsApp, entreprise, service souhaité et message. Ces informations nous parviennent par
+          WhatsApp, sujet, entreprise, type de projet et message. Ces informations nous parviennent par
           e-mail.
         </p>
         <p>

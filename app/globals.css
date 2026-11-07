@@ -9,8 +9,11 @@
   --color-or: #d4af37;
   --color-or-clair: #e8c95f;
   --color-or-fonce: #a8862a;
+  --color-champagne: #e9dcb8; /* or champagne : accents doux, textes en italique */
   --color-blanc: #ffffff;
   --color-gris: #a3a3a3;
+  --color-gris-clair: #cfcfcf; /* textes secondaires sur fond sombre */
+  --color-gris-fonce: #6e6e6e; /* mentions discrètes */
 
   /* 4 niveaux de profondeur, du plus profond au plus proche */
   --color-noir: #080808; /* fond du site */

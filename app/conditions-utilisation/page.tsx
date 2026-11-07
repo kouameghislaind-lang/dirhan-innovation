@@ -27,8 +27,8 @@ export default function ConditionsUtilisation() {
     >
       <Article numero={1} titre="Objet du site">
         <p>
-          Ce site présente {nom}, ses services (création de sites web, applications mobiles,
-          logiciels, branding, marketing digital, intelligence artificielle), ses projets et ses
+          Ce site présente {nom}, ses services (communication digitale, création de sites web,
+          applications web et mobiles, création graphique, logiciels, création de contenus), ses projets et ses
           coordonnées. Il permet également de nous contacter via un formulaire.
         </p>
       </Article>

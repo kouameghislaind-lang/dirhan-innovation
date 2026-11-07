@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import Logo from "@/components/Logo";
 import Bouton from "@/components/ui/Bouton";
-import { actionPrincipale, navigation, site } from "@/lib/site";
+import { actionPrincipale, liensContact, messagesWhatsApp, navigation, site } from "@/lib/site";
 
 export default function Header() {
   const pathname = usePathname();
@@ -66,7 +66,7 @@ export default function Header() {
 
         {/* Menu ordinateur */}
         <nav aria-label="Navigation principale" className="hidden lg:block">
-          <ul className="flex items-center gap-8">
+          <ul className="flex items-center gap-6 xl:gap-8">
             {navigation.map((lien) => (
               <li key={lien.href}>
                 <Link
@@ -88,9 +88,13 @@ export default function Header() {
           </ul>
         </nav>
 
-        <Bouton href={actionPrincipale.href} taille="compact" className="hidden lg:inline-flex">
-          {actionPrincipale.label}
-        </Bouton>
+        {/* Bouton ordinateur : masqué par son conteneur (et non par le bouton lui-même,
+            dont la classe « inline-flex » entrait en conflit avec « hidden ») */}
+        <div className="hidden lg:block">
+          <Bouton href={actionPrincipale.href} taille="compact">
+            {actionPrincipale.label}
+          </Bouton>
+        </div>
 
         {/* Bouton "hamburger" pour le mobile */}
         <button
@@ -162,13 +166,24 @@ export default function Header() {
 
         <div
           style={{ transitionDelay: menuOuvert ? "350ms" : "0ms" }}
-          className={`relative space-y-6 border-t border-ligne px-6 pb-10 pt-8 transition-opacity duration-500 ${
+          className={`relative space-y-4 border-t border-ligne px-6 pb-10 pt-8 transition-opacity duration-500 ${
             menuOuvert ? "opacity-100" : "opacity-0"
           }`}
         >
           <Bouton href={actionPrincipale.href} onClick={fermerMenu} fleche="droite" className="w-full">
             {actionPrincipale.label}
           </Bouton>
+          {site.whatsapp && (
+            <Bouton
+              href={liensContact.whatsapp(messagesWhatsApp.general)}
+              externe
+              variante="secondaire"
+              fleche="externe"
+              className="w-full"
+            >
+              Écrire sur WhatsApp
+            </Bouton>
+          )}
           <p className="text-center text-sm text-gris">
             {site.ville} · <span className="font-titre italic text-blanc/80">{site.signature}</span>
           </p>

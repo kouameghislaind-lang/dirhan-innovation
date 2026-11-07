@@ -37,9 +37,11 @@ export function prenomDe(nomComplet: string) {
 /** Construit l'objet, la version HTML et la version texte de la confirmation. */
 export function emailConfirmationProspect(d: DemandeDevis) {
   const prenom = prenomDe(d.nom);
-  // Le service est affiché en clair ; sans service choisi, on parle de « votre projet »
-  const sujetHtml = d.service ? `« <strong>${echapper(d.service)}</strong> »` : "votre projet";
-  const sujetTexte = d.service ? `« ${d.service} »` : "votre projet";
+  // Le type de projet est affiché en clair ; sinon le sujet, sinon « votre projet »
+  // Sans type de projet choisi, on reprend le sujet saisi par le visiteur
+  const intitule = d.service || d.sujet;
+  const sujetHtml = intitule ? `« <strong>${echapper(intitule)}</strong> »` : "votre projet";
+  const sujetTexte = intitule ? `« ${intitule} »` : "votre projet";
 
   // Extrait du message rappelé au prospect (limité pour rester lisible)
   const extrait = d.message.length > 600 ? `${d.message.slice(0, 600).trim()}…` : d.message;

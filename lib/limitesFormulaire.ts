@@ -5,6 +5,7 @@ export const LIMITES_FORMULAIRE = {
   nom: 100,
   email: 150,
   telephone: 30,
+  sujet: 150,
   entreprise: 120,
   service: 80,
   message: 5000,

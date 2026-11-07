@@ -1,3 +1,4 @@
+import FilAriane from "@/components/FilAriane";
 import type { Metadata } from "next";
 import { metaPage } from "@/lib/seo";
 import Link from "next/link";
@@ -7,11 +8,25 @@ import AppelAction from "@/components/ui/AppelAction";
 import Bouton from "@/components/ui/Bouton";
 import EnTeteSection from "@/components/ui/EnTeteSection";
 import Section from "@/components/ui/Section";
-import { realisations, services } from "@/lib/site";
+import BadgeStatut from "@/components/BadgeStatut";
+import {
+  liensContact,
+  messagesWhatsApp,
+  realisations,
+  services,
+  site,
+  statutsDescription,
+  type StatutProjet,
+} from "@/lib/site";
+
+// Statuts réellement utilisés par les projets, dans l'ordre d'avancement
+const statutsAffiches = (["concept", "prototype", "developpement", "livre"] as StatutProjet[]).filter((s) =>
+  realisations.some((p) => p.statut === s),
+);
 
 export const metadata: Metadata = metaPage(
   "Réalisations",
-  "Découvrez les projets réalisés par DIRHAN INNOVATION : sites web, applications mobiles, logiciels, branding, marketing digital et intelligence artificielle.",
+  "Découvrez les projets réalisés par DIRHAN INNOVATION : sites web, applications, logiciels et solutions digitales.",
   "/realisations",
 );
 
@@ -30,6 +45,7 @@ export default function PageRealisations() {
           />
         }
       >
+        <FilAriane etapes={[{ label: "Réalisations" }]} className="apparition-immediate mb-8" />
         <EnTeteSection
           niveau={1}
           surtitre="Réalisations"
@@ -43,11 +59,23 @@ export default function PageRealisations() {
 
         {/* Légende honnête des statuts */}
         <Apparition immediat delai={0.1}>
-          <p className="carte mt-8 inline-flex max-w-2xl items-start gap-3 rounded-[var(--radius-petit)] px-5 py-4 text-sm leading-relaxed text-gris">
-            <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rotate-45 bg-or" />
-            Les projets présentés ici sont des initiatives internes de DIRHAN INNOVATION. Leur
-            statut (en développement, prototype ou concept) est indiqué sur chaque projet.
-          </p>
+          <div className="mt-10 rounded-[var(--radius-carte)] border border-ligne bg-noir-carte/60 p-6 sm:p-8">
+            <p className="max-w-3xl text-sm leading-relaxed text-gris-clair">
+              Les projets présentés ici sont des <strong className="font-semibold text-blanc">initiatives internes</strong>{" "}
+              de {site.nom}. Leur état d&apos;avancement réel est indiqué sur chaque projet ; les visuels
+              sans capture d&apos;écran sont des illustrations de concept.
+            </p>
+            <dl className="mt-6 grid gap-4 border-t border-ligne pt-6 sm:grid-cols-2 lg:grid-cols-4">
+              {statutsAffiches.map((s) => (
+                <div key={s}>
+                  <dt>
+                    <BadgeStatut statut={s} />
+                  </dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-gris">{statutsDescription[s]}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </Apparition>
       </Section>
 
@@ -75,20 +103,34 @@ export default function PageRealisations() {
         </div>
       </section>
 
-      {/* ===== Ce que nous pouvons réaliser pour vous ===== */}
-      <Section fond="alterne" filet>
-        <EnTeteSection titre="Ce que nous pouvons réaliser pour vous." />
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => (
-            <Apparition key={s.slug} delai={(i % 3) * 0.1}>
-              <Link href={`/services#${s.slug}`} className="carte carte-interactive group block h-full p-8">
-                <span className="font-titre text-sm text-blanc/35">{s.numero}</span>
-                <h3 className="titre-carte mt-4 transition-colors group-hover:text-or">{s.titre}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-gris">{s.prestations.slice(0, 3).join(" · ")}</p>
-              </Link>
-            </Apparition>
-          ))}
+      {/* ===== Ce que nous pouvons réaliser pour vous : liste éditoriale ===== */}
+      <Section fond="alterne" filet conteneur="grid gap-12 lg:grid-cols-12 lg:gap-16">
+        <div className="lg:col-span-4">
+          <EnTeteSection
+            surtitre="Nos expertises"
+            titre="Ce que nous pouvons réaliser pour vous."
+          />
         </div>
+        <ul className="border-t border-ligne lg:col-span-8">
+          {services.map((s, i) => (
+            <li key={s.slug} className="border-b border-ligne">
+              <Apparition delai={(i % 3) * 0.05}>
+                <Link href={`/services/${s.slug}`} className="group grid items-baseline gap-2 py-6 sm:grid-cols-12 sm:gap-6">
+                  <span className="font-titre text-sm text-blanc/35 transition-colors group-hover:text-or sm:col-span-1">
+                    {s.numero}
+                  </span>
+                  <span className="titre-carte transition-colors group-hover:text-or sm:col-span-5">{s.titre}</span>
+                  <span className="text-sm leading-relaxed text-gris sm:col-span-5">
+                    {s.prestations.slice(0, 3).join(" · ")}
+                  </span>
+                  <span aria-hidden className="hidden text-right text-or transition-transform group-hover:translate-x-1 sm:col-span-1 sm:block">
+                    →
+                  </span>
+                </Link>
+              </Apparition>
+            </li>
+          ))}
+        </ul>
       </Section>
 
       {/* ===== Appel à l'action ===== */}
@@ -98,6 +140,8 @@ export default function PageRealisations() {
             Votre projet sera <span className="texte-or italic">le prochain.</span>
           </>
         }
+        bouton={{ label: "Parlons de votre projet", href: "/contact" }}
+        secondaire={{ label: "Écrire sur WhatsApp", href: liensContact.whatsapp(messagesWhatsApp.devis), externe: true }}
       />
     </>
   );

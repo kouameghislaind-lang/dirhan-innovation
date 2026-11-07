@@ -1,3 +1,4 @@
+import FilAriane from "@/components/FilAriane";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { entreprise, liensLegaux } from "@/lib/site";
@@ -22,6 +23,7 @@ export function PageLegale({
     <section className="pt-36 pb-24 lg:pt-44 lg:pb-32">
       <div className="mx-auto max-w-3xl px-6">
         <div className="apparition-immediate">
+          <FilAriane etapes={[{ label: titre }]} className="mb-8" />
           <p className="surtitre">{surtitre}</p>
           <h1 className="titre-affiche mt-5">{titre}</h1>
           <p className="texte-intro mt-6">{intro}</p>

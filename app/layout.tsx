@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Animations from "@/components/Animations";
+import BoutonWhatsApp from "@/components/BoutonWhatsApp";
 import EffetsInteractifs from "@/components/EffetsInteractifs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -34,9 +35,9 @@ export const metadata: Metadata = {
     "création site web Côte d'Ivoire",
     "application mobile Abidjan",
     "développement logiciel",
-    "branding",
-    "marketing digital",
-    "intelligence artificielle",
+    "communication digitale",
+    "création graphique",
+    "création de contenus",
   ],
   openGraph: {
     type: "website",
@@ -120,6 +121,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </main>
           <Footer />
+          <BoutonWhatsApp />
         </Animations>
       </body>
     </html>

@@ -101,6 +101,11 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
                     className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-or/15 to-transparent transition-transform duration-1000 ease-out group-hover:translate-x-full"
                   />
                   <BadgeStatut statut={p.statut} className="absolute left-4 top-4" />
+                  {!p.image && (
+                    <span className="absolute bottom-3 right-4 rounded-full bg-noir/70 px-3 py-1 text-[0.7rem] uppercase tracking-[0.2em] text-blanc/60 backdrop-blur-sm">
+                      Illustration de concept
+                    </span>
+                  )}
                 </div>
 
                 {/* Texte */}
@@ -112,10 +117,10 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
                   <p className="mt-1 text-sm text-gris">{p.client}</p>
                   <p className={`mt-4 leading-relaxed text-blanc/80 ${enVedette ? "text-lg lg:flex-none" : "flex-1"}`}>{p.resume}</p>
 
-                  {/* Projet vedette : les axes du projet en étiquettes */}
-                  {enVedette && (
+                  {/* Les axes du projet en étiquettes (tous sur le projet vedette, 3 sinon) */}
+                  {p.axes.length > 0 && (
                     <ul className="mt-6 flex flex-wrap gap-2">
-                      {p.axes.map((axe) => (
+                      {(enVedette ? p.axes : p.axes.slice(0, 3)).map((axe) => (
                         <li key={axe} className="rounded-full border border-ligne px-3 py-1 text-xs text-blanc/70">
                           {axe}
                         </li>
@@ -123,16 +128,28 @@ export default function GrilleRealisations({ projets }: { projets: Realisation[]
                     </ul>
                   )}
 
-                  <Bouton
-                    href={`/realisations/${p.slug}`}
-                    variante="accent"
-                    taille="compact"
-                    fleche="droite"
-                    etirer
-                    className="mt-7 self-start"
-                  >
-                    Découvrir le projet
-                  </Bouton>
+                  <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <Bouton
+                      href={`/realisations/${p.slug}`}
+                      variante="accent"
+                      taille="compact"
+                      fleche="droite"
+                      etirer
+                    >
+                      Découvrir le projet
+                    </Bouton>
+                    {/* Lien externe uniquement s'il existe (au-dessus du lien étiré) */}
+                    {p.lien && (
+                      <a
+                        href={p.lien}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="lien-anime relative z-10 text-sm font-semibold text-or hover:text-or-clair"
+                      >
+                        Voir en ligne ↗<span className="sr-only"> (nouvel onglet)</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </motion.article>
             </motion.li>
