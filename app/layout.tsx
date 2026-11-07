@@ -2,10 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Animations from "@/components/Animations";
 import BoutonWhatsApp from "@/components/BoutonWhatsApp";
+import SuiviEvenements from "@/components/SuiviEvenements";
 import EffetsInteractifs from "@/components/EffetsInteractifs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { estSitePublic, liensContact, services, site } from "@/lib/site";
+import { dirigeant, estSitePublic, liensContact, services, site } from "@/lib/site";
 import "./globals.css";
 
 // Police élégante pour les titres
@@ -32,12 +33,14 @@ export const metadata: Metadata = {
   keywords: [
     "agence digitale Abidjan",
     "agence digitale Cocody",
-    "création site web Côte d'Ivoire",
-    "application mobile Abidjan",
+    "application web et mobile",
     "développement logiciel",
+    "création site web Côte d'Ivoire",
     "communication digitale",
     "création graphique",
     "création de contenus",
+    "logiciel professionnel",
+    "solutions numériques entreprises",
   ],
   openGraph: {
     type: "website",
@@ -49,6 +52,11 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
   },
+  // Validation de la propriété du site dans Google Search Console (balise meta).
+  // Renseigner GOOGLE_SITE_VERIFICATION sur Vercel avec le code fourni par Google.
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
   // Les versions de test Vercel ne sont pas indexées par Google
   robots: estSitePublic ? { index: true, follow: true } : { index: false, follow: false },
 };
@@ -59,10 +67,13 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-// Fiche "entreprise" pour Google (données structurées)
-const donneesStructurees = {
-  "@context": "https://schema.org",
+// Fiche "entreprise" et "site" pour Google (données structurées Schema.org).
+// ProfessionalService est un type d'Organization : une seule fiche suffit pour l'entreprise.
+// Uniquement des informations confirmées (aucun RCCM, adresse précise, avis ou note inventés).
+const idEntreprise = `${site.url}/#entreprise`;
+const entrepriseSchema = {
   "@type": "ProfessionalService",
+  "@id": idEntreprise,
   name: site.nom,
   slogan: site.signature,
   description: site.description,
@@ -89,6 +100,23 @@ const donneesStructurees = {
   // Profils officiels de l'entreprise (relie la page Facebook au site pour Google)
   sameAs: [site.facebook.url],
   ...(site.email ? { email: site.email } : {}),
+  // Dirigeant (nom et fonction validés)
+  founder: { "@type": "Person", name: dirigeant.nom, jobTitle: "Fondateur & Directeur Général" },
+};
+
+const donneesStructurees = {
+  "@context": "https://schema.org",
+  "@graph": [
+    entrepriseSchema,
+    {
+      "@type": "WebSite",
+      "@id": `${site.url}/#site`,
+      url: site.url,
+      name: site.nom,
+      inLanguage: "fr",
+      publisher: { "@id": idEntreprise },
+    },
+  ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -122,6 +150,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </main>
           <Footer />
           <BoutonWhatsApp />
+          <SuiviEvenements />
         </Animations>
       </body>
     </html>

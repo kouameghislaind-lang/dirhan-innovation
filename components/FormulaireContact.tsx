@@ -1,11 +1,12 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Bouton from "@/components/ui/Bouton";
 import { envoyerMessage, type EtatContact } from "@/app/contact/actions";
 import { LIMITES_FORMULAIRE } from "@/lib/limitesFormulaire";
 import { services } from "@/lib/site";
+import { suivreEvenement } from "@/lib/suivi";
 
 const etatInitial: EtatContact = {
   statut: "initial",
@@ -49,6 +50,21 @@ function Champ({
 export default function FormulaireContact() {
   const [etat, action, envoiEnCours] = useActionState(envoyerMessage, etatInitial);
   const { erreurs, valeurs } = etat;
+  const listeService = useRef<HTMLSelectElement>(null);
+
+  // Arrivée depuis une page service (/contact?service=sites-web) : le type de projet est présélectionné
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("service");
+    const service = services.find((s) => s.slug === slug);
+    if (service && listeService.current && !listeService.current.value) {
+      listeService.current.value = service.titre;
+    }
+  }, []);
+
+  // Demande envoyée : événement pour la mesure d'audience (sans effet tant qu'aucun outil n'est installé)
+  useEffect(() => {
+    if (etat.statut === "succes") suivreEvenement("formulaire_envoye", { type_projet: "contact" });
+  }, [etat.statut, etat.horodatage]);
 
   const bordure = (cle: keyof typeof erreurs) =>
     erreurs[cle] ? "border-red-400/70" : "border-ligne-forte";
@@ -137,6 +153,7 @@ export default function FormulaireContact() {
       <Champ id="service" label="Type de projet" erreur={erreurs.service} optionnel>
         <div className="relative">
         <select
+          ref={listeService}
           id="service"
           name="service"
           defaultValue={valeurs.service}

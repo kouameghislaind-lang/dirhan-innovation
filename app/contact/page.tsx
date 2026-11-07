@@ -7,7 +7,7 @@ import { metaPage } from "@/lib/seo";
 import { liensContact, messagesWhatsApp, reassurance, site } from "@/lib/site";
 
 export const metadata: Metadata = metaPage(
-  "Contact",
+  "Contact et demande de devis",
   "Parlez-nous de votre projet digital : communication, site web, application, création graphique, logiciel ou contenus. Agence basée à Cocody, Abidjan.",
   "/contact",
 );

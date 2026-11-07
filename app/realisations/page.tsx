@@ -25,7 +25,7 @@ const statutsAffiches = (["concept", "prototype", "developpement", "livre"] as S
 );
 
 export const metadata: Metadata = metaPage(
-  "Réalisations",
+  "Réalisations et projets digitaux",
   "Découvrez les projets réalisés par DIRHAN INNOVATION : sites web, applications, logiciels et solutions digitales.",
   "/realisations",
 );
@@ -80,8 +80,9 @@ export default function PageRealisations() {
       </Section>
 
       {/* ===== Projets ===== */}
-      <section className="pb-24 lg:pb-32">
+      <section aria-labelledby="titre-projets" className="pb-24 lg:pb-32">
         <div className="mx-auto max-w-7xl px-6">
+          <h2 id="titre-projets" className="sr-only">Nos projets</h2>
           {aDesProjets ? (
             <GrilleRealisations projets={realisations} />
           ) : (

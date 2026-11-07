@@ -13,7 +13,7 @@ import { aPropos, accueil, engagements, equipe, manifeste, reassurance, site, va
 import logo from "@/public/logo-dirhan.png";
 
 export const metadata: Metadata = metaPage(
-  "À propos",
+  "À propos : agence digitale à Abidjan",
   "DIRHAN INNOVATION, agence digitale et technologique née à Abidjan : présentation, vision, mission, valeurs, approche de travail et engagements envers nos clients.",
   "/a-propos",
 );

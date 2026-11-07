@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps<"/services/[slug]">
   const { slug } = await params;
   const service = trouverService(slug);
   if (!service) return { title: "Service introuvable", robots: { index: false } };
-  return metaPage(`${service.titre} à Abidjan`, service.metaDescription, `/services/${service.slug}`);
+  return metaPage(service.titreSeo, service.metaDescription, `/services/${service.slug}`);
 }
 
 export default async function PageService({ params }: PageProps<"/services/[slug]">) {
@@ -33,6 +33,8 @@ export default async function PageService({ params }: PageProps<"/services/[slug
   if (!service) notFound();
 
   const lienWhatsApp = liensContact.whatsapp(messagesWhatsApp.service(service.titre));
+  // Le formulaire de contact présélectionne ce service (paramètre ?service=)
+  const lienDevis = `/contact?service=${service.slug}`;
   const autres = services.filter((s) => s.slug !== service.slug);
 
   // Données structurées pour Google : le service et sa FAQ
@@ -94,13 +96,16 @@ export default async function PageService({ params }: PageProps<"/services/[slug
             </Apparition>
             <Apparition immediat delai={0.24}>
               <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
-                <Bouton href="/contact" fleche="droite">
-                  Parlons de votre projet
+                <Bouton href={lienDevis} fleche="droite">
+                  Demander un devis
                 </Bouton>
                 <Bouton href={lienWhatsApp} externe variante="secondaire" fleche="externe">
-                  Écrire sur WhatsApp
+                  Discuter sur WhatsApp
                 </Bouton>
               </div>
+              <Bouton href="/realisations" variante="lien" fleche="droite" className="mt-6">
+                Découvrir nos réalisations
+              </Bouton>
             </Apparition>
           </div>
 
@@ -238,8 +243,9 @@ export default async function PageService({ params }: PageProps<"/services/[slug
           </>
         }
         texte="Décrivez votre besoin en quelques lignes : nous revenons vers vous avec une proposition claire."
-        bouton={{ label: "Parlons de votre projet", href: "/contact" }}
-        secondaire={{ label: "Écrire sur WhatsApp", href: lienWhatsApp, externe: true }}
+        bouton={{ label: "Demander un devis", href: lienDevis }}
+        secondaire={{ label: "Discuter sur WhatsApp", href: lienWhatsApp, externe: true }}
+        lienDiscret={{ label: "Découvrir nos réalisations", href: "/realisations" }}
       />
 
       {/* ===== Autres services ===== */}

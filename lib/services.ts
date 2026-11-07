@@ -13,6 +13,8 @@ export type Service = {
   slug: string;
   icone: IconeNom;
   titre: string;
+  // Titre de la page pour Google (sans « | DIRHAN INNOVATION », ajouté automatiquement)
+  titreSeo: string;
   // Phrase courte (cartes, menus)
   description: string;
   // Sous-titre du haut de la page dédiée
@@ -36,6 +38,7 @@ export const services: Service[] = [
     slug: "communication-digitale",
     icone: "marketing",
     titre: "Communication digitale",
+    titreSeo: "Communication digitale à Abidjan",
     description:
       "Stratégie, présence en ligne et accompagnement de marque pour être vu par les bonnes personnes.",
     accroche:
@@ -95,6 +98,7 @@ export const services: Service[] = [
     slug: "sites-web",
     icone: "web",
     titre: "Création de sites web",
+    titreSeo: "Création de sites web en Côte d'Ivoire",
     description:
       "Sites vitrines, institutionnels et landing pages rapides, élégants et bien référencés.",
     accroche:
@@ -155,6 +159,7 @@ export const services: Service[] = [
     slug: "applications-web-mobiles",
     icone: "mobile",
     titre: "Applications web et mobiles",
+    titreSeo: "Développement d'applications web et mobiles",
     description:
       "Applications métiers et interfaces fluides, pensées pour vos utilisateurs et leur téléphone.",
     accroche:
@@ -213,6 +218,7 @@ export const services: Service[] = [
     slug: "creation-graphique",
     icone: "identite",
     titre: "Création graphique",
+    titreSeo: "Création graphique et identité visuelle",
     description:
       "Identités visuelles, logos et supports qui donnent à votre marque une image forte et cohérente.",
     accroche:
@@ -271,6 +277,7 @@ export const services: Service[] = [
     slug: "logiciels",
     icone: "logiciel",
     titre: "Développement de logiciels",
+    titreSeo: "Création de logiciels professionnels",
     description:
       "Logiciels métiers, outils de gestion et automatisation qui simplifient le travail de vos équipes.",
     accroche:
@@ -329,6 +336,7 @@ export const services: Service[] = [
     slug: "creation-de-contenus",
     icone: "contenu",
     titre: "Création de contenus",
+    titreSeo: "Création de contenus digitaux à Abidjan",
     description:
       "Visuels et contenus digitaux qui captent l'attention et racontent votre marque.",
     accroche:

@@ -12,13 +12,16 @@ import AppelAction from "@/components/ui/AppelAction";
 import Bouton from "@/components/ui/Bouton";
 import EnTeteSection from "@/components/ui/EnTeteSection";
 import Section from "@/components/ui/Section";
+import { metaPage } from "@/lib/seo";
 import { accueil, equipe, liensContact, messagesWhatsApp, realisations, services, site } from "@/lib/site";
 
-// L'accueil garde le titre principal du site ; on précise juste son adresse officielle.
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-  openGraph: { url: "/" },
-};
+// Titre complet (sans suffixe) et informations de partage de l'accueil
+export const metadata: Metadata = metaPage(
+  `${site.nom} | Agence digitale à Abidjan, Côte d'Ivoire`,
+  site.description,
+  "/",
+  { titreAbsolu: true },
+);
 
 // Équipe : seules les personnes avec un nom ET une vraie photo sont affichées
 const membres = equipe.filter((m) => m.nom && m.photo);

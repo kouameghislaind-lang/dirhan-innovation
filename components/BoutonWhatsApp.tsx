@@ -47,7 +47,7 @@ export default function BoutonWhatsApp() {
         <IconeWhatsApp className="h-5 w-5" />
       </span>
       <span className="hidden text-sm font-medium sm:inline">
-        Parlons de votre projet
+        Discuter sur WhatsApp
       </span>
     </a>
   );

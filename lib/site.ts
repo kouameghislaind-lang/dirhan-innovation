@@ -158,9 +158,9 @@ export const entreprise = {
   siege: "", // Adresse complète du siège (commune, quartier, rue...)
   directeurPublication: "Didier Ghislain KOUAME, Fondateur & Directeur Général", // Nom et fonction du responsable du site
   hebergeur: {
-    nom: "", // ex. : Vercel Inc.
-    adresse: "",
-    site: "",
+    nom: "Vercel Inc.", // hébergeur réel du site (confirmé : déploiement Vercel)
+    adresse: "", // adresse postale de Vercel : à recopier depuis vercel.com/legal
+    site: "https://vercel.com",
   },
   // Durée de conservation des messages reçus via le formulaire (à valider)
   dureeConservation: "3 ans à compter du dernier échange",

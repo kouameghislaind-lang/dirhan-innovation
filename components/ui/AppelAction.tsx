@@ -12,6 +12,8 @@ type Props = {
   // Bouton secondaire facultatif, à côté du bouton principal
   // externe : lien vers un autre site (ex. WhatsApp), ouvert dans un nouvel onglet
   secondaire?: { label: string; href: string; externe?: boolean };
+  // Lien texte discret sous les boutons (ex. « Découvrir nos réalisations »)
+  lienDiscret?: { label: string; href: string };
 };
 
 export default function AppelAction({
@@ -19,6 +21,7 @@ export default function AppelAction({
   texte = "Décrivez-nous votre idée en quelques lignes : nous revenons vers vous rapidement avec une proposition claire et adaptée.",
   bouton = actionPrincipale,
   secondaire,
+  lienDiscret,
 }: Props) {
   return (
     <Section>
@@ -50,6 +53,11 @@ export default function AppelAction({
                 </Bouton>
               )}
             </div>
+            {lienDiscret && (
+              <Bouton href={lienDiscret.href} variante="lien" fleche="droite" className="mt-8">
+                {lienDiscret.label}
+              </Bouton>
+            )}
           </div>
         </div>
       </Apparition>

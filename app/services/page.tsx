@@ -11,7 +11,7 @@ import { metaPage } from "@/lib/seo";
 import { accueil, liensContact, messagesWhatsApp, services } from "@/lib/site";
 
 export const metadata: Metadata = metaPage(
-  "Services",
+  "Solutions numériques pour entreprises",
   "Communication digitale, création de sites web, applications web et mobiles, création graphique, logiciels et contenus : les expertises de DIRHAN INNOVATION à Abidjan.",
   "/services",
 );
