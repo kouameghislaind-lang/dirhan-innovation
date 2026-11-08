@@ -47,7 +47,8 @@ export default async function PageService({ params }: PageProps<"/services/[slug
       serviceType: service.titre,
       url: `${site.url}/services/${service.slug}`,
       areaServed: { "@type": "Country", name: "Côte d'Ivoire" },
-      provider: { "@type": "ProfessionalService", name: site.nom, url: site.url },
+      // Prestataire : renvoie à la fiche Organization déclarée dans app/layout.tsx
+      provider: { "@type": "Organization", "@id": `${site.url}/#entreprise`, name: site.nom, url: site.url },
     },
     {
       "@context": "https://schema.org",

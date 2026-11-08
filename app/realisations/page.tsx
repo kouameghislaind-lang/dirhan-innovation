@@ -54,7 +54,7 @@ export default function PageRealisations() {
               Des projets qui <span className="texte-or italic">font la différence.</span>
             </>
           }
-          intro="Découvrez nos projets internes, prototypes et concepts : le laboratoire où DIRHAN INNOVATION imagine et construit les solutions digitales de demain."
+          intro="Boutique en ligne, logiciel de gestion de flotte, solution pour la restauration : découvrez nos projets internes, prototypes et concepts, le laboratoire où DIRHAN INNOVATION imagine et construit à Abidjan les solutions digitales de demain."
         />
 
         {/* Légende honnête des statuts */}

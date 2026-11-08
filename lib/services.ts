@@ -102,7 +102,7 @@ export const services: Service[] = [
     description:
       "Sites vitrines, institutionnels et landing pages rapides, élégants et bien référencés.",
     accroche:
-      "Des sites rapides, élégants et faciles à utiliser, sur ordinateur comme sur téléphone, pour transformer vos visiteurs en clients.",
+      "Création de sites web à Abidjan et pour toute la Côte d'Ivoire : des sites rapides, élégants et faciles à utiliser, sur ordinateur comme sur téléphone, pour transformer vos visiteurs en clients.",
     metaDescription:
       "Création de sites vitrines, institutionnels, landing pages et refonte de sites à Abidjan. Sites rapides, responsive et optimisés pour Google.",
     presentation: [
@@ -163,7 +163,7 @@ export const services: Service[] = [
     description:
       "Applications métiers et interfaces fluides, pensées pour vos utilisateurs et leur téléphone.",
     accroche:
-      "Des applications simples à utiliser et performantes, conçues autour des besoins réels de vos utilisateurs.",
+      "Développement d'applications web et mobiles en Côte d'Ivoire : des applications simples à utiliser et performantes, conçues autour des besoins réels de vos utilisateurs.",
     metaDescription:
       "Conception d'applications web et mobiles sur mesure à Abidjan : applications métiers, interfaces web et solutions mobiles par DIRHAN INNOVATION.",
     presentation: [
@@ -281,7 +281,7 @@ export const services: Service[] = [
     description:
       "Logiciels métiers, outils de gestion et automatisation qui simplifient le travail de vos équipes.",
     accroche:
-      "Des outils sur mesure qui centralisent vos données, automatisent les tâches répétitives et simplifient le travail de vos équipes.",
+      "Développement logiciel sur mesure : des outils qui centralisent vos données, automatisent les tâches répétitives et simplifient le travail de vos équipes.",
     metaDescription:
       "Développement de logiciels métiers, outils de gestion, automatisation et solutions personnalisées à Abidjan par DIRHAN INNOVATION.",
     presentation: [
@@ -340,7 +340,7 @@ export const services: Service[] = [
     description:
       "Visuels et contenus digitaux qui captent l'attention et racontent votre marque.",
     accroche:
-      "Des visuels et des contenus soignés qui captent l'attention, valorisent votre offre et racontent votre marque.",
+      "Création de contenus numériques : des visuels et des textes soignés qui captent l'attention, valorisent votre offre et racontent votre marque.",
     metaDescription:
       "Création visuelle, contenus digitaux et supports de communication pour vos réseaux sociaux, votre site et vos campagnes, par DIRHAN INNOVATION à Abidjan.",
     presentation: [

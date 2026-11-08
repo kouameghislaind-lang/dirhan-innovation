@@ -357,7 +357,7 @@ export const sectionsPolitique: SectionPolitique[] = [
           ["Formulaire", "/contact"],
           ["Téléphone / WhatsApp", site.telephone],
           ["E-mail", site.email],
-          ["Adresse", site.ville],
+          ["Localisation", site.ville],
         ],
       },
       {

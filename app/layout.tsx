@@ -68,26 +68,33 @@ export const viewport: Viewport = {
 };
 
 // Fiche "entreprise" et "site" pour Google (données structurées Schema.org).
-// ProfessionalService est un type d'Organization : une seule fiche suffit pour l'entreprise.
+// Type « Organization » (et non « LocalBusiness/ProfessionalService ») : le site ne présente pas
+// de bureau ou d'accueil du public ; seule la localisation confirmée (Cocody, Abidjan) est indiquée.
 // Uniquement des informations confirmées (aucun RCCM, adresse précise, avis ou note inventés).
+// L'identifiant ci-dessous est réutilisé par les fiches « Service » des pages services.
 const idEntreprise = `${site.url}/#entreprise`;
 const entrepriseSchema = {
-  "@type": "ProfessionalService",
+  "@type": "Organization",
   "@id": idEntreprise,
   name: site.nom,
   slogan: site.signature,
   description: site.description,
   url: site.url,
-  logo: `${site.url}/icon.png`,
+  logo: { "@type": "ImageObject", url: `${site.url}/icon.png`, width: 192, height: 192 },
   image: `${site.url}/opengraph-image.png`,
-  // Adresse : commune (Cocody) et district (Abidjan) uniquement, sans rue ni GPS non confirmés
+  // Localisation : commune (Cocody) et district (Abidjan) uniquement, sans rue ni GPS non confirmés
   address: {
     "@type": "PostalAddress",
     addressLocality: site.adresse.quartier,
     addressRegion: site.adresse.ville,
     addressCountry: site.adresse.codePays,
   },
-  areaServed: ["Côte d'Ivoire", "Afrique"],
+  // Zone d'intervention (et non un lieu d'accueil du public)
+  areaServed: [
+    { "@type": "City", name: "Abidjan" },
+    { "@type": "Country", name: "Côte d'Ivoire" },
+    "Afrique francophone",
+  ],
   knowsAbout: services.map((s) => s.titre),
   telephone: liensContact.telephoneE164,
   contactPoint: {

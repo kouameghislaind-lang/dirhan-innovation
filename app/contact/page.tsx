@@ -55,8 +55,9 @@ export default function PageContact() {
                 Parlons de <span className="texte-or italic">votre projet.</span>
               </h1>
               <p className="texte-intro mt-6">
-                Une idée, un besoin, une ambition ? Écrivez-nous : nous revenons vers vous
-                rapidement avec une réponse claire.
+                Un site web, une application, un logiciel ou une communication à repenser ?
+                Décrivez votre projet : nous revenons vers vous rapidement avec une réponse
+                claire et une proposition adaptée.
               </p>
             </Apparition>
 
@@ -114,7 +115,7 @@ export default function PageContact() {
                   ))}
                 </ul>
                 <div className="mt-5 text-sm text-gris">
-                  <span className="text-blanc/80">Adresse :</span> <address className="inline not-italic">{site.ville}</address>
+                  <span className="text-blanc/80">Localisation :</span> <address className="inline not-italic">{site.ville}</address>
                 </div>
               </div>
             </Apparition>

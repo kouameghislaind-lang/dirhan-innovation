@@ -93,8 +93,8 @@ export const accueil = {
     accroche:
       "Une agence digitale et technologique née à Abidjan, qui réunit stratégie, design et technologie au service de votre croissance.",
     paragraphes: [
-      "DIRHAN INNOVATION accompagne les entreprises, institutions et entrepreneurs qui veulent exister avec force dans le monde numérique.",
-      "Communication, sites web, applications, logiciels et contenus : nous concevons des solutions sur mesure, exigeantes dans le détail et pensées pour les usages du marché ivoirien et africain.",
+      "DIRHAN INNOVATION accompagne les entreprises, institutions et entrepreneurs d'Abidjan et de Côte d'Ivoire qui veulent exister avec force dans le monde numérique.",
+      "Création de sites web, développement d'applications et de logiciels sur mesure, communication digitale et contenus numériques : nous concevons des solutions digitales pour entreprises, exigeantes dans le détail et pensées pour les usages du marché ivoirien et africain.",
     ],
   },
 

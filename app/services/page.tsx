@@ -38,10 +38,10 @@ export default function PageServices() {
           surtitre="Nos services"
           titre={
             <>
-              Tout le digital, <span className="texte-or italic">sous un même toit.</span>
+              Solutions digitales pour entreprises, <span className="texte-or italic">sous un même toit.</span>
             </>
           }
-          intro="De la stratégie de communication au logiciel sur mesure, six expertises complémentaires pour faire grandir votre entreprise."
+          intro="Création de sites web à Abidjan, applications web et mobiles, logiciels sur mesure, communication digitale et contenus numériques : six expertises complémentaires, réunies dans une même équipe, pour faire grandir votre entreprise."
         />
       </Section>
 
